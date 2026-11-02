@@ -312,6 +312,11 @@ public class DatabaseConfig {
         hikariConfig.setPassword(normalized.getPassword());
 
         if (normalized.isH2()) {
+            if (isProd) {
+                String errorMsg = "[FATAL ERROR] Production profile strictly requires PostgreSQL. In-memory H2 database is forbidden in production.";
+                log.error(errorMsg);
+                throw new IllegalStateException(errorMsg);
+            }
             hikariConfig.setDriverClassName("org.h2.Driver");
             hikariConfig.setMaximumPoolSize(10);
         } else {

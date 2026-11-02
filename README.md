@@ -1,4 +1,4 @@
-﻿
+
 # HOSPITRACK Hospital Referral & Patient Record Management Platform
 
 > **"Connected Care. Smarter Referrals. Better Patient Journeys."**
@@ -110,34 +110,54 @@ Verifies initial seed integrity, hospital onboarding, inpatient admission, dynam
 
 ---
 
-## Production Cloud Deployment (Render)
+## Production Cloud Deployment
 
-Hospitrack is configured for zero-friction multi-service deployment on **Render**:
+Hospitrack is configured for zero-friction modern decoupled cloud deployment:
 
 ```text
-Frontend  --> Render Static Site (or Node SPA)
-Backend   --> Render Web Service (Docker / Java 17)
-Database  --> Render Managed PostgreSQL
+Frontend  --> Vercel Edge Network (Static Hosting via vercel.json)
+Backend   --> Railway Container Service (Docker / Java 17 via railway.json)
+Database  --> Managed PostgreSQL 16 (Encrypted connection pool)
+CI/CD     --> GitHub Actions (.github/workflows/ci-cd.yml)
 ```
 
-### Deployment Configuration (`render.yaml`)
+### 1. Backend & Database Deployment (Railway)
 
-1. Connect your repository to Render via Blueprint.
-2. Provide the following environment variables in the Render Dashboard:
-   - `JWT_SECRET`: High-entropy secret key (min 32 characters)
-   - `FRONTEND_URL`: URL of deployed frontend
-   - `BREVO_API_KEY`: API key from your Brevo dashboard
+1. Create a new project on [Railway](https://railway.app) and provision a **PostgreSQL** database.
+2. Add a new service from your GitHub repository pointing to `backend/Dockerfile`.
+3. Configure the following environment variables in Railway:
+   - `SPRING_PROFILES_ACTIVE`: `prod`
+   - `DATABASE_URL`: `${{Postgres.DATABASE_URL}}`
+   - `JWT_SECRET`: High-entropy 256-bit key (e.g. `openssl rand -base64 48`)
+   - `FRONTEND_URL`: URL of deployed frontend (e.g. `https://hospitrack.vercel.app`)
    - `INITIAL_ADMIN_EMAIL`: `admin@yourdomain.com`
-   - `INITIAL_ADMIN_PASSWORD`: Strong administrator password
+   - `INITIAL_ADMIN_PASSWORD`: Strong administrator password (must be changed before production)
+   - `BREVO_API_KEY`: API key from your Brevo dashboard (optional for transactional emails)
+
+### 2. Frontend Deployment (Vercel)
+
+1. Import your GitHub repository into [Vercel](https://vercel.com).
+2. Set Root Directory to `./` and Framework Preset to `Other`.
+3. Update `env-config.js` or configure your build step to inject the backend URL:
+   ```javascript
+   window.ENV = {
+     API_BASE_URL: 'https://your-railway-backend.up.railway.app'
+   };
+   ```
+4. Deploy to Vercel. Static routing, SPA fallback, and security headers are automatically managed via `vercel.json`.
+
+### 3. Alternative Single-Service Deployment (Render)
+
+Hospitrack also supports multi-service blueprint deployment on Render using `render.yaml`.
 
 ---
 
 ## Demonstration Accounts
 
-For local evaluation, see [DEMO_CREDENTIALS.md](file:///s:/hospitrack-project/DEMO_CREDENTIALS.md).
+For local evaluation, see [DEMO_CREDENTIALS.md](DEMO_CREDENTIALS.md).
 
 ---
 
-## ðŸ“œ Presentation Explanation for College Evaluation
+## Presentation Explanation for Evaluation
 
-> *"Hospitrack uses a role-based authentication architecture. Users authenticate through the Spring Boot backend. Passwords are stored as BCrypt hashes rather than plaintext passwords. Spring Security determines authorization based on the user's role and hospital relationship. PostgreSQL stores the application data, while Brevo is used for transactional emails such as account verification and password reset. The application is deployed using Render."*
+> *"Hospitrack uses a decoupled, role-based healthcare architecture. The frontend is served as a high-performance Vanilla JavaScript Single Page Application from Vercel's global edge network, communicating securely over HTTPS REST with a containerized Java 17 Spring Boot backend hosted on Railway. Passwords are encrypted using BCrypt, and API communications are secured via stateless JWT Bearer tokens with strict role-based access control and multi-tenant hospital data isolation. PostgreSQL stores clinical and audit records, while GitHub Actions provides continuous integration and deployment."*

@@ -1,0 +1,180 @@
+name: Hospitrack CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-verify:
+    name: Build & Verify (Java 17, Node.js 20 & Docker)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: hospitrack_db
+          POSTGRES_USER: hospitrack
+          POSTGRES_PASSWORD: hospitrack_secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hospitrack -d hospitrack_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17 (Eclipse Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run Backend Maven Test Suite
+        run: |
+          cd backend
+          chmod +x mvnw 2>/dev/null || true
+          if [ -f "./mvnw" ]; then
+            ./mvnw test -Dtest=AuthSecurityTests,ClinicalWorkflowTests,DataIsolationTests,DatabaseConfigurationTests,ConnectedCareTests,SearchAndWorkspaceSecurityTests -B
+          else
+            mvn test -Dtest=AuthSecurityTests,ClinicalWorkflowTests,DataIsolationTests,DatabaseConfigurationTests,ConnectedCareTests,SearchAndWorkspaceSecurityTests -B
+          fi
+
+      - name: Package Backend Executable JAR
+        run: |
+          cd backend
+          if [ -f "./mvnw" ]; then
+            ./mvnw package -DskipTests -B
+          else
+            mvn package -DskipTests -B
+          fi
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Start Ephemeral Test Backend
+        run: |
+          mkdir -p runtime
+          nohup java -jar backend/target/hospitrack-backend-1.0.0.jar \
+            --spring.profiles.active=prod \
+            --server.port=8080 \
+            --spring.datasource.url=jdbc:postgresql://localhost:5432/hospitrack_db \
+            --spring.datasource.username=hospitrack \
+            --spring.datasource.password=hospitrack_secret \
+            --app.jwt.secret=hospitrack_super_secret_jwt_signing_key_at_least_256_bits_length_for_hmac_sha256_security_production_2026 \
+            --app.cors.allowed-origins="http://localhost:8000,http://127.0.0.1:8000,http://localhost:3000,http://127.0.0.1:3000,https://hospitrack.vercel.app,https://hospitrack-preview.vercel.app,https://hospitrack-prod.vercel.app,https://hospitrack.netlify.app" \
+            > runtime/backend-ci.log 2>&1 &
+          echo $! > runtime/backend.pid
+
+      - name: Wait for Backend Healthcheck Probe
+        run: |
+          node -e "
+            const http = require('http');
+            const fs = require('fs');
+            const start = Date.now();
+            function probe() {
+              http.get('http://127.0.0.1:8080/api/health', (res) => {
+                if (res.statusCode === 200) {
+                  console.log('✓ Ephemeral backend process is healthy and operational on port 8080');
+                  process.exit(0);
+                }
+                retry();
+              }).on('error', retry);
+            }
+            function retry() {
+              if (Date.now() - start > 60000) {
+                console.error('✗ Timed out waiting for backend to become healthy within 60s. Log output:');
+                if (fs.existsSync('runtime/backend-ci.log')) {
+                  console.error(fs.readFileSync('runtime/backend-ci.log', 'utf8'));
+                }
+                process.exit(1);
+              }
+              setTimeout(probe, 1000);
+            }
+            probe();
+          "
+
+      - name: Validate Frontend Assets and Configuration
+        run: |
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+
+            // 1. Verify critical configuration files exist and are non-empty
+            const required = ['index.html', '404.html', 'vercel.json', 'netlify.toml', 'env-config.js', 'js/config.js'];
+            for (const f of required) {
+              if (!fs.existsSync(f)) throw new Error('Missing file: ' + f);
+              if (fs.statSync(f).size === 0) throw new Error('Empty file: ' + f);
+            }
+            console.log('✓ All critical frontend configuration files verified');
+
+            // 2. Validate Vercel static routing rules and security headers
+            const v = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+            if (!v.rewrites || v.rewrites.length === 0) throw new Error('vercel.json missing rewrites');
+            if (!v.headers || v.headers.length === 0) throw new Error('vercel.json missing security headers');
+
+            // 3. Validate Netlify SPA routing and static asset guards
+            const n = fs.readFileSync('netlify.toml', 'utf8');
+            if (!n.includes('from = \"/*\"') && !n.includes('/*')) throw new Error('netlify.toml missing SPA redirect');
+            console.log('✓ Vercel and Netlify deployment descriptors validated');
+
+            // 4. Validate all static CSS and JS assets referenced in index.html
+            const html = fs.readFileSync('index.html', 'utf8');
+            const regex = /<(link[^>]+href|script[^>]+src)=[\x22\x27]([^\x22\x27]+)[\x22\x27]/g;
+            const assets = [];
+            let m;
+            while ((m = regex.exec(html)) !== null) {
+              const url = m[2];
+              if (!url.startsWith('http') && !url.startsWith('data:')) assets.push(url.split('?')[0]);
+            }
+
+            for (const a of assets) {
+              const clean = a.replace(/^\//, '');
+              if (!fs.existsSync(clean)) throw new Error('Missing static asset: ' + clean);
+              if (fs.statSync(clean).size === 0) throw new Error('Empty static asset: ' + clean);
+            }
+            console.log('✓ All ' + assets.length + ' static assets referenced in index.html verified successfully');
+          "
+
+      - name: Run Production Readiness Audit Suite (Phase 6 Verification)
+        run: node test_phase6_production_readiness.js
+
+      - name: Run Frontend Deployment & Cross-Origin Integration Suite (Phase 5 Verification)
+        run: node test_phase5_frontend_deployment.js
+
+      - name: Run Core QA Integration Test Suite
+        run: node test.js
+
+      - name: Run Full Production Smoke Test Suite
+        run: node smoke_test.js
+
+      - name: Stop Ephemeral Test Backend
+        if: always()
+        run: |
+          if [ -f runtime/backend.pid ]; then
+            kill $(cat runtime/backend.pid) 2>/dev/null || true
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Verify Backend Docker Image Build Only
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: false
+          tags: hospitrack-backend:ci

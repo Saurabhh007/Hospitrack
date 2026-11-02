@@ -45,20 +45,9 @@ runtime/**/*.log
 # Extracted Maven distribution
 backend/.mvn/apache-maven-3.9.6/
 
-
-# Temporary development workspace
-scratch/
-
-# Runtime-generated logs
-runtime/*.log
-runtime/**/*.log
-
-# Extracted Maven distribution
-backend/.mvn/apache-maven-3.9.6/
-
-
 # Local documentation backups
 README.backup.md
 
-# Internal development reports
+# Internal development and phase reports
 HOSPITRACK_PHASE_*_REPORT.md
+HOSPITRACK_PHASE_*_READINESS_REPORT.md
