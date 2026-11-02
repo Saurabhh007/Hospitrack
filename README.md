@@ -1,5 +1,5 @@
 ﻿
-# HOSPITRACK â€” Hospital Referral & Patient Record Management Platform
+# HOSPITRACK Hospital Referral & Patient Record Management Platform
 
 > **"Connected Care. Smarter Referrals. Better Patient Journeys."**
 
@@ -7,7 +7,7 @@ Hospitrack is a modern, enterprise-ready, role-based healthcare coordination pla
 
 ---
 
-## ðŸ—ï¸ Master System Architecture
+## Master System Architecture
 
 ```text
                +-------------------------------------------------+
@@ -34,7 +34,7 @@ Hospitrack is a modern, enterprise-ready, role-based healthcare coordination pla
 
 ---
 
-## ðŸŒŸ Security & Authentication Features
+## Security & Authentication Features
 
 1. **Spring Security 6 & BCrypt Hashing**: Passwords stored solely as BCrypt hashes (`passwordHash`). Plaintext passwords never stored, logged, or returned in API responses.
 2. **Short-Lived Access & Single-Use Refresh Tokens**: Cryptographically secure token generation with SHA-256 token hashing for email verification and password reset workflows.
@@ -50,7 +50,7 @@ Hospitrack is a modern, enterprise-ready, role-based healthcare coordination pla
 
 ---
 
-## ðŸš€ Quick Local Startup
+## Quick Local Startup
 
 ### Prerequisites
 
@@ -75,7 +75,7 @@ This automatically starts the Spring Boot backend on `http://localhost:8080` and
 
 ---
 
-## ðŸ§ª Automated Testing
+## Automated Testing
 
 ### 1. Spring Boot Backend Security & Workflow Tests (17/17 PASS)
 
@@ -110,7 +110,7 @@ Verifies initial seed integrity, hospital onboarding, inpatient admission, dynam
 
 ---
 
-## ðŸŒ Production Cloud Deployment (Render)
+## Production Cloud Deployment (Render)
 
 Hospitrack is configured for zero-friction multi-service deployment on **Render**:
 
@@ -132,7 +132,7 @@ Database  --> Render Managed PostgreSQL
 
 ---
 
-## ðŸ”‘ Demonstration Accounts
+## Demonstration Accounts
 
 For local evaluation, see [DEMO_CREDENTIALS.md](file:///s:/hospitrack-project/DEMO_CREDENTIALS.md).
 
