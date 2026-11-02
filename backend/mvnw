@@ -1,0 +1,17 @@
+#!/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+if [ ! -f "$DIR/.mvn/apache-maven-3.9.6/bin/mvn" ] || [ ! -f "$DIR/.mvn/apache-maven-3.9.6/boot/plexus-classworlds-*.jar" ]; then
+    if [ -f "$DIR/.mvn/apache-maven-3.9.6-bin.zip" ]; then
+        echo "[INFO] Restoring Apache Maven 3.9.6 from local archive..."
+        tar -xf "$DIR/.mvn/apache-maven-3.9.6-bin.zip" -C "$DIR/.mvn" 2>/dev/null || unzip -q -o "$DIR/.mvn/apache-maven-3.9.6-bin.zip" -d "$DIR/.mvn"
+    fi
+fi
+
+if [ -f "$DIR/.mvn/apache-maven-3.9.6/bin/mvn" ]; then
+    chmod +x "$DIR/.mvn/apache-maven-3.9.6/bin/mvn"
+    exec "$DIR/.mvn/apache-maven-3.9.6/bin/mvn" "$@"
+else
+    exec mvn "$@"
+fi
+

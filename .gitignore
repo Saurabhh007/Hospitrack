@@ -1,0 +1,61 @@
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.*
+secrets.*
+
+# Node & Frontend
+node_modules/
+dist/
+build/
+.cache/
+
+# Java & Maven
+backend/target/
+target/
+*.class
+*.jar
+*.war
+*.ear
+!backend/.mvn/*.zip
+!backend/.mvn/**/*.jar
+.mvn/apache-maven-3.9.6/
+
+# IDE & OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+backup_baseline/
+
+# Local demo credentials
+DEMO_CREDENTIALS.md
+
+# Temporary development workspace
+scratch/
+
+# Runtime-generated logs
+runtime/*.log
+runtime/**/*.log
+
+# Extracted Maven distribution
+backend/.mvn/apache-maven-3.9.6/
+
+
+# Temporary development workspace
+scratch/
+
+# Runtime-generated logs
+runtime/*.log
+runtime/**/*.log
+
+# Extracted Maven distribution
+backend/.mvn/apache-maven-3.9.6/
+
+
+# Local documentation backups
+README.backup.md

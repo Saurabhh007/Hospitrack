@@ -1,0 +1,52 @@
+services:
+  # ==============================================================================
+  # Hospitrack Healthcare SaaS Platform — Independent Backend Service
+  # Dedicated Java 17 Spring Boot Container on Render
+  # ==============================================================================
+  - type: web
+    name: hospitrack-backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8080
+      - key: SERVER_PORT
+        value: 8080
+      # External PostgreSQL Connection URL & Credentials
+      # Format: postgresql://postgres.[REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: HIBERNATE_DDL_AUTO
+        value: update
+      # 256-bit cryptographically secure secret (Render generates automatically)
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRATION_MS
+        value: 3600000
+      - key: JWT_REFRESH_EXPIRATION_MS
+        value: 604800000
+      # Optimized JVM memory profile for Render Free 512MB limit
+      - key: JAVA_OPTS
+        value: -Xms96m -Xmx256m -XX:MaxMetaspaceSize=112m -XX:ReservedCodeCacheSize=48m -Xss512k -XX:+UseSerialGC
+      - key: FRONTEND_URL
+        value: http://localhost:8000,http://127.0.0.1:8000,http://localhost:10000,http://127.0.0.1:10000
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_SENDER_EMAIL
+        value: no-reply@hospitrack.com
+      - key: BREVO_SENDER_NAME
+        value: Hospitrack Production
+      - key: INITIAL_ADMIN_EMAIL
+        value: admin@hospitrack.com
+      - key: INITIAL_ADMIN_PASSWORD
+        sync: false

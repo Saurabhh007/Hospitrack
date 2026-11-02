@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospitrack — Hospital Referral &amp; Patient Record Management System</title>
+  <meta name="description" content="Connected Healthcare Coordination Platform. Real-time hospital bed visibility, specialist referrals, prescription safety, and longitudinal health records.">
+  <meta name="hospitrack-api-base-url" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css?v=4.8">
+  <link rel="stylesheet" href="/css/print.css?v=1.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">
+</head>
+<body>
+
+  <!-- ======================================================== -->
+  <!-- 1. PUBLIC WEBSITE LANDING EXPERIENCE                      -->
+  <!-- ======================================================== -->
+  <div id="landingViewContainer" class="landing-page-container">
+    <!-- Landing Navigation Header -->
+    <header class="landing-navbar">
+      <div class="landing-nav-inner">
+        <a href="#home" class="landing-brand" onclick="navigateToLandingSection('home')">
+          <div class="landing-brand-icon">H+</div>
+          <div class="landing-brand-text">
+            <span class="landing-brand-title">HOSPITRACK</span>
+            <span class="landing-brand-subtitle">Healthcare Care Network</span>
+          </div>
+        </a>
+
+        <nav class="landing-nav-links">
+          <a href="#home" onclick="navigateToLandingSection('home')" class="nav-link active">Home</a>
+          <a href="#how-it-works" onclick="navigateToLandingSection('how-it-works')" class="nav-link">How It Works</a>
+          <a href="#for-patients" onclick="navigateToLandingSection('for-patients')" class="nav-link">For Patients</a>
+          <a href="#for-doctors" onclick="navigateToLandingSection('for-doctors')" class="nav-link">For Doctors</a>
+          <a href="#for-hospitals" onclick="navigateToLandingSection('for-hospitals')" class="nav-link">For Hospitals</a>
+          <a href="#about" onclick="navigateToLandingSection('about')" class="nav-link">About</a>
+        </nav>
+
+        <div class="landing-nav-actions">
+          <button type="button" class="btn btn-primary" onclick="navigateToLogin()">Sign In to Portal</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="landing-hero-section">
+      <div class="landing-hero-content">
+        <div class="hero-badge-pill">
+          <span class="pulse-dot"></span>
+          <span>Healthcare Coordination Network</span>
+        </div>
+        <h1 class="hero-headline">Connected healthcare.<br>Simpler care coordination.</h1>
+        <p class="hero-subtext">
+          Hospitrack unites patients, physicians, and accredited hospitals in one authoritative healthcare platform with real-time bed visibility, specialist referrals, prescription safety, and longitudinal health records.
+        </p>
+        <div class="hero-cta-group">
+          <button type="button" class="btn btn-primary btn-lg" onclick="navigateToLogin()">
+            Sign In to Workspace
+          </button>
+        </div>
+        <div class="hero-trust-bar">
+          <div class="trust-metric">
+            <strong>Authoritative</strong>
+            <span>Secure Database</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-metric">
+            <strong>Zero Duplicate</strong>
+            <span>Prescription Safety</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-metric">
+            <strong>Inter-Facility</strong>
+            <span>Referrals &amp; Transfers</span>
+          </div>
+        </div>
+      </div>
+      <div class="landing-hero-graphic" aria-label="Hospitrack Live Clinical Network Overview">
+        <div class="hero-preview-card">
+          <div class="hero-preview-header">
+            <div class="hero-preview-badge">
+              <span class="live-dot-pulse" aria-hidden="true"></span>
+              <span class="hero-preview-badge-text">Live Clinical Network</span>
+            </div>
+            <div class="hero-preview-meta">
+              <span class="hero-meta-icon" aria-hidden="true">
+                <svg class="lucide lucide-activity" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              </span>
+              <span>24/7 Coordinated</span>
+            </div>
+          </div>
+
+          <div class="hero-preview-list" role="list">
+            <div class="hero-preview-item role-patient" onclick="navigateToLogin('PATIENT')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateToLogin('PATIENT');}" role="button" tabindex="0" title="Launch Patient Portal">
+              <div class="hero-preview-icon patient" aria-hidden="true">
+                <svg class="lucide lucide-user-check" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+              </div>
+              <div class="hero-preview-content">
+                <div class="hero-preview-item-top">
+                  <strong class="hero-preview-title">Patient Health Portal</strong>
+                  <span class="hero-preview-pill patient">Longitudinal EHR</span>
+                </div>
+                <span class="hero-preview-desc">Prescriptions, Care Timelines &amp; Lab Results</span>
+              </div>
+              <div class="hero-preview-arrow" aria-hidden="true">
+                <svg class="lucide lucide-arrow-right" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </div>
+            </div>
+
+            <div class="hero-preview-item role-doctor" onclick="navigateToLogin('DOCTOR')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateToLogin('DOCTOR');}" role="button" tabindex="0" title="Launch Doctor Clinical Workstation">
+              <div class="hero-preview-icon doctor" aria-hidden="true">
+                <svg class="lucide lucide-stethoscope" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 2.3A.3.3 0 0 0 5 2.6V6a4 4 0 0 0 8 0V2.6a.3.3 0 0 0 .2-.3V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v.3z"></path><path d="M9 10v4a6 6 0 0 0 12 0v-2"></path><circle cx="21" cy="12" r="2"></circle></svg>
+              </div>
+              <div class="hero-preview-content">
+                <div class="hero-preview-item-top">
+                  <strong class="hero-preview-title">Doctor Clinical Workstation</strong>
+                  <span class="hero-preview-pill doctor">Decision Safety</span>
+                </div>
+                <span class="hero-preview-desc">Consultations &amp; Drug Safety Validation</span>
+              </div>
+              <div class="hero-preview-arrow" aria-hidden="true">
+                <svg class="lucide lucide-arrow-right" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </div>
+            </div>
+
+            <div class="hero-preview-item role-hospital" onclick="navigateToLogin('HOSPITAL')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateToLogin('HOSPITAL');}" role="button" tabindex="0" title="Launch Hospital Operations Center">
+              <div class="hero-preview-icon hospital" aria-hidden="true">
+                <svg class="lucide lucide-building-2" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+              </div>
+              <div class="hero-preview-content">
+                <div class="hero-preview-item-top">
+                  <strong class="hero-preview-title">Hospital Operations Center</strong>
+                  <span class="hero-preview-pill hospital">Real-Time Capacity</span>
+                </div>
+                <span class="hero-preview-desc">Live Bed Occupancy &amp; Emergency Transfers</span>
+              </div>
+              <div class="hero-preview-arrow" aria-hidden="true">
+                <svg class="lucide lucide-arrow-right" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-preview-footer">
+            <div class="hero-footer-stat">
+              <span class="hero-footer-dot green" aria-hidden="true"></span>
+              <span><strong>3</strong> Accredited Hospitals</span>
+            </div>
+            <div class="hero-footer-divider" aria-hidden="true"></div>
+            <div class="hero-footer-stat">
+              <span class="hero-footer-dot blue" aria-hidden="true"></span>
+              <span><strong>119</strong> Beds Live</span>
+            </div>
+            <div class="hero-footer-divider" aria-hidden="true"></div>
+            <div class="hero-footer-stat">
+              <span class="hero-footer-dot teal" aria-hidden="true"></span>
+              <span>Zero-Duplicate Rx</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How Hospitrack Works -->
+    <section id="how-it-works" class="landing-section bg-surface-alt">
+      <div class="section-header-center">
+        <span class="section-tag">How It Works</span>
+        <h2 class="section-title">Streamlined Clinical Pathway</h2>
+        <p class="section-desc">From individual health tracking to multi-facility care coordination, Hospitrack provides end-to-end healthcare management.</p>
+      </div>
+      <div class="pathway-steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <div class="step-icon">👤</div>
+          <h3>Patient Care</h3>
+          <p>Manage healthcare records and follow your treatment journey with full visibility into prescriptions, appointments, and diagnostic reports.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <div class="step-icon">🩺</div>
+          <h3>Clinical Care</h3>
+          <p>Doctors conduct structured consultations with automated duplicate drug safety checks and direct specialist referrals.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <div class="step-icon">🏥</div>
+          <h3>Hospital Coordination</h3>
+          <p>Hospitals manage patients, beds, referrals and emergency transfers with real-time capacity accounting across accredited facilities.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- For Patients Section -->
+    <section id="for-patients" class="landing-section">
+      <div class="audience-split-grid">
+        <div>
+          <span class="section-tag">For Patients</span>
+          <h2 class="section-title">Your Healthcare History in One Place</h2>
+          <p class="section-desc">Access your prescriptions, diagnostic laboratory results, doctor consultations, and hospital referral journey whenever you need it.</p>
+          <ul class="audience-bullets">
+            <li><span>✓</span> Personal health records and medical timeline</li>
+            <li><span>✓</span> Active prescription regimens and dosage instructions</li>
+            <li><span>✓</span> Diagnostic laboratory results and test status</li>
+            <li><span>✓</span> Specialist referrals tracking and hospital reviews</li>
+          </ul>
+          <div class="mt-24">
+            <button class="btn btn-primary" onclick="navigateToLogin('PATIENT')">Patient Sign In</button>
+          </div>
+        </div>
+        <div class="card audience-card-pad">
+          <div class="d-flex-between mb-16">
+            <span class="badge badge-info">Patient Record</span>
+            <span class="text-xs-muted">Verified Profile</span>
+          </div>
+          <div class="audience-preview-list">
+            <div class="audience-preview-box">
+              <strong>Cardiology Consultation</strong>
+              <p class="audience-preview-subtext">City General Hospital • Active Care Plan</p>
+            </div>
+            <div class="audience-preview-box">
+              <strong>Active Prescriptions</strong>
+              <p class="audience-preview-subtext">Aspirin 75mg • Atorvastatin 40mg</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- For Doctors Section -->
+    <section id="for-doctors" class="landing-section bg-surface-alt">
+      <div class="audience-split-grid reverse">
+        <div>
+          <span class="section-tag">For Doctors</span>
+          <h2 class="section-title">Focused Clinical Workstation</h2>
+          <p class="section-desc">Conduct consultations efficiently with full access to patient histories, duplicate drug validation, and direct specialist referral dispatch.</p>
+          <ul class="audience-bullets">
+            <li><span>✓</span> Priority patient queue and clinical history</li>
+            <li><span>✓</span> Comprehensive consultation notes with vitals, symptoms, and diagnosis</li>
+            <li><span>✓</span> Prescription builder with duplicate drug rejection</li>
+            <li><span>✓</span> Diagnostic laboratory orders and specialist referrals</li>
+          </ul>
+          <div class="mt-24">
+            <button class="btn btn-primary" onclick="navigateToLogin('DOCTOR')">Doctor Sign In</button>
+          </div>
+        </div>
+        <div class="card audience-card-pad">
+          <div class="d-flex-between mb-16">
+            <span class="badge badge-success">Doctor Workstation</span>
+            <span class="text-xs-muted">Priority Queue</span>
+          </div>
+          <div class="audience-preview-box-white">
+            <span class="badge badge-warning text-badge-urgent">URGENT</span>
+            <strong class="text-bold-sm">Patient Consultation</strong>
+            <p class="audience-preview-subtext text-muted">Cardiology Evaluation • Safe Prescription Enabled</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- For Hospitals Section -->
+    <section id="for-hospitals" class="landing-section">
+      <div class="audience-split-grid">
+        <div>
+          <span class="section-tag">For Hospitals</span>
+          <h2 class="section-title">Bed Management &amp; Operations Center</h2>
+          <p class="section-desc">Manage inpatient admissions, monitor live bed availability across departments, and triage emergency inter-hospital transfers.</p>
+          <ul class="audience-bullets">
+            <li><span>✓</span> Dynamic bed occupancy gauge with automatic calculations</li>
+            <li><span>✓</span> Inpatient patient admission and doctor staff onboarding</li>
+            <li><span>✓</span> Cross-facility specialist referral coordination</li>
+            <li><span>✓</span> Emergency transfer triage with instant bed capacity updates</li>
+          </ul>
+          <div class="mt-24">
+            <button class="btn btn-primary" onclick="navigateToLogin('HOSPITAL')">Hospital Admin Sign In</button>
+          </div>
+        </div>
+        <div class="card audience-card-center">
+          <div class="d-flex-between mb-16">
+            <span class="badge badge-info">Operations Overview</span>
+            <span class="text-xs-muted">Live Capacity</span>
+          </div>
+          <div class="audience-stat-box">
+            <div class="audience-stat-value">208 / 250</div>
+            <div class="audience-stat-label">Occupied Beds (83%) • 42 Available</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="landing-section bg-surface-alt">
+      <div class="section-header-center">
+        <span class="section-tag">About Hospitrack</span>
+        <h2 class="section-title">Connecting Medical Facilities Nationally</h2>
+        <p class="section-desc">
+          Hospitrack was designed to solve clinical fragmentation between medical facilities. By uniting patient health records, physician prescriptions, dynamic bed accounting, and inter-hospital referrals in a single authoritative platform, Hospitrack improves patient outcomes and reduces administrative delays.
+        </p>
+      </div>
+    </section>
+
+    <!-- Landing Footer -->
+    <footer class="landing-footer">
+      <div class="landing-footer-inner d-flex-between flex-wrap gap-20">
+        <div class="landing-brand">
+          <div class="landing-brand-icon">H+</div>
+          <div>
+            <strong class="text-main">HOSPITRACK</strong>
+            <p class="text-xs-muted">Hospital Referral &amp; Patient Record Management System</p>
+          </div>
+        </div>
+        <div class="text-sm-muted">
+          &copy; 2026 Hospitrack Healthcare Coordination Network. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. MODERN HEALTHCARE LOGIN EXPERIENCE (Design #3 Split)  -->
+  <!-- ======================================================== -->
+  <div id="loginViewContainer" class="auth-page-wrapper hidden">
+    <div class="auth-split-container">
+      <!-- Left: Modern Healthcare Hero Visual Area -->
+      <div class="auth-brand-pane">
+        <!-- Ambient glowing orbs & fine medical grid overlay -->
+        <div class="auth-mesh-glow-1" aria-hidden="true"></div>
+        <div class="auth-mesh-glow-2" aria-hidden="true"></div>
+        <div class="auth-grid-pattern" aria-hidden="true"></div>
+
+        <div class="auth-brand-pane-content">
+          <div class="auth-brand-logo-hero">
+            <div class="auth-brand-logo-icon">H+</div>
+            <div class="auth-brand-text">
+              <h2>HOSPITRACK</h2>
+              <p>Hospital Referral &amp; Patient Record Management</p>
+            </div>
+          </div>
+
+          <div class="auth-brand-hero-msg">
+            <div class="auth-hero-pill-tag">
+              <span class="auth-pill-dot" aria-hidden="true"></span>
+              <span>Accredited Clinical Network</span>
+            </div>
+            <h1>Modern care coordination.</h1>
+            <p>Connect with accredited hospitals, coordinate specialist referrals, and maintain secure longitudinal health records with clinical decision safety.</p>
+            
+            <ul class="auth-brand-features-list">
+              <li>
+                <span class="feature-check-icon" aria-hidden="true">✓</span>
+                <div class="feature-item-text">
+                  <strong>Authoritative Hospital Network</strong>
+                  <span>Accredited facilities with live bed capacity triage</span>
+                </div>
+              </li>
+              <li>
+                <span class="feature-check-icon" aria-hidden="true">✓</span>
+                <div class="feature-item-text">
+                  <strong>Dual-Layer Prescription Safety</strong>
+                  <span>Zero-duplicate dispensing &amp; drug interaction alerts</span>
+                </div>
+              </li>
+              <li>
+                <span class="feature-check-icon" aria-hidden="true">✓</span>
+                <div class="feature-item-text">
+                  <strong>Longitudinal Patient EHR</strong>
+                  <span>Continuous multi-facility medical history across life stages</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="auth-brand-footer">
+            <div class="auth-security-badge">
+              <span class="badge-lock-icon" aria-hidden="true">🔒</span>
+              <span>256-Bit TLS Encryption &bull; HIPAA &amp; ISO 27001 Standard</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Centered Authentication Panel -->
+      <div class="auth-card-pane">
+        <div class="auth-card-wrapper">
+          <div class="auth-card-box">
+            <div class="auth-card-nav-top">
+              <button type="button" class="back-to-home-btn" onclick="showLandingView()">
+                <span class="back-arrow" aria-hidden="true">&larr;</span> Back to Home
+              </button>
+            </div>
+
+            <div class="auth-card-header">
+              <h2 class="auth-title-h2">Welcome back</h2>
+              <p id="authSubtitle" class="auth-subtitle">Continue to your personal health records, prescriptions &amp; lab results.</p>
+            </div>
+
+            <!-- Role Selector Tabs: Patient | Doctor | Hospital -->
+            <div class="role-tabs-wrapper">
+              <div class="role-tabs-modern" role="tablist" aria-label="Select User Role">
+                <span class="role-tab-glider" id="roleTabGlider" aria-hidden="true"></span>
+                <button 
+                  type="button" 
+                  role="tab" 
+                  class="role-tab active" 
+                  id="loginRoleTabPatient" 
+                  aria-selected="true" 
+                  tabindex="0"
+                  onclick="selectLoginRole('PATIENT')"
+                >
+                  <span class="role-tab-icon" aria-hidden="true">👤</span>
+                  <span class="role-tab-label">Patient</span>
+                </button>
+                <button 
+                  type="button" 
+                  role="tab" 
+                  class="role-tab" 
+                  id="loginRoleTabDoctor" 
+                  aria-selected="false" 
+                  tabindex="-1"
+                  onclick="selectLoginRole('DOCTOR')"
+                >
+                  <span class="role-tab-icon" aria-hidden="true">🩺</span>
+                  <span class="role-tab-label">Doctor</span>
+                </button>
+                <button 
+                  type="button" 
+                  role="tab" 
+                  class="role-tab" 
+                  id="loginRoleTabHospital" 
+                  aria-selected="false" 
+                  tabindex="-1"
+                  onclick="selectLoginRole('HOSPITAL')"
+                >
+                  <span class="role-tab-icon" aria-hidden="true">🏥</span>
+                  <span class="role-tab-label">Hospital</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Real Login Form with Dynamic Adaptation -->
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)" novalidate>
+              <div class="form-group mb-16">
+                <label for="loginIdentifier" class="form-label" id="loginIdentifierLabel">
+                  Patient Email or ID <span class="req-star">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="loginIdentifier" 
+                  class="form-control auth-input" 
+                  placeholder="e.g. ramesh@example.com or patient-id" 
+                  autocomplete="username"
+                  required
+                >
+              </div>
+
+              <div class="form-group mb-16">
+                <div class="d-flex-between mb-8">
+                  <label for="loginPassword" class="form-label mb-0">Password <span class="req-star">*</span></label>
+                </div>
+                <div class="pwd-input-wrap">
+                  <input 
+                    type="password" 
+                    id="loginPassword" 
+                    class="form-control auth-input" 
+                    placeholder="••••••••••••" 
+                    autocomplete="current-password"
+                    required
+                  >
+                  <button 
+                    type="button" 
+                    class="pwd-toggle-btn" 
+                    id="pwdToggleBtn"
+                    aria-label="Toggle password visibility" 
+                    onclick="togglePasswordVisibility('loginPassword', 'pwdToggleBtn')"
+                  >
+                    👁️
+                  </button>
+                </div>
+              </div>
+
+              <div class="d-flex-between mb-20 auth-options-row">
+                <label for="loginRememberMe" class="checkbox-label mb-0">
+                  <input type="checkbox" id="loginRememberMe">
+                  <span>Remember me</span>
+                </label>
+              </div>
+
+              <div id="loginAlertBanner" class="alert-banner hidden"></div>
+
+              <button type="submit" id="loginSubmitBtn" class="btn btn-primary btn-block btn-lg auth-submit-btn">
+                <span id="loginBtnSpinner" class="btn-spinner hidden"></span>
+                <span id="loginBtnText">Sign In</span>
+              </button>
+
+              <!-- Dynamic Role Helper Note / Link -->
+              <div id="loginRoleHelperNote" class="auth-role-helper-note">
+                Need help accessing your patient portal? <a href="javascript:void(0)" onclick="openHelpDeskModal('PATIENT')" class="auth-helper-link">Contact Hospital Desk</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 4. AUTHENTICATED APPLICATION MAIN WRAPPER                 -->
+  <!-- ======================================================== -->
+  <div id="authenticatedAppContainer" class="hidden">
+    <!-- Top App Header -->
+    <header class="app-header no-print">
+      <!-- Brand & Page Breadcrumb -->
+      <div class="header-brand-breadcrumb-wrap">
+        <button type="button" class="mobile-nav-toggle" onclick="toggleMobileSidebar()" aria-label="Toggle Navigation">
+          ☰
+        </button>
+        <div class="brand" onclick="navigateToDefaultOverview()" title="Hospitrack Healthcare Platform">
+          <div class="brand-icon">H+</div>
+          <span class="brand-title">HOSPITRACK</span>
+        </div>
+        <div id="headerBreadcrumbContainer" class="header-breadcrumb-container">
+          <span id="headerBreadcrumbRole" class="badge badge-info badge-role-pill">Workspace</span>
+          <span class="breadcrumb-separator">&bull;</span>
+          <span id="headerBreadcrumbTitle" class="breadcrumb-active-title">Dashboard</span>
+        </div>
+      </div>
+
+      <!-- Global Grouped Search -->
+      <div class="global-search-container">
+        <span class="global-search-icon" aria-hidden="true">🔍</span>
+        <input 
+          type="text" 
+          id="globalSearchInput" 
+          class="global-search-input" 
+          placeholder="Search patients, doctors, hospitals, referrals..."
+          aria-label="Search patients, doctors, hospitals, referrals"
+          oninput="handleGlobalSearchInput(this.value)"
+          onfocus="handleGlobalSearchInput(this.value)"
+          autocomplete="off"
+        >
+        <span class="search-shortcut-pill">Ctrl+K</span>
+        <div id="globalSearchDropdown" class="global-search-dropdown"></div>
+      </div>
+
+      <!-- Right Header Controls -->
+      <div class="header-controls">
+        <div class="system-status-pill" title="Operational Healthcare Network">
+          <span class="status-dot"></span>
+          <span>System Operational</span>
+        </div>
+
+        <!-- Notifications Hub -->
+        <div class="notification-btn-wrap">
+          <button type="button" class="btn-icon" id="notifToggleBtn" onclick="toggleNotifDropdown()" title="Notifications" aria-label="Notifications">
+            <span>🔔</span>
+            <span id="notifBadgeDot" class="badge-dot hidden">0</span>
+          </button>
+          <div id="notifDropdown" class="notif-dropdown" role="region" aria-label="Notifications Center">
+            <div class="notif-header">
+              <strong class="notif-title-text">Notifications</strong>
+              <button type="button" class="btn-link-sm" onclick="markAllNotifsRead()">Mark all read</button>
+            </div>
+            <div id="notifList" class="notif-list"></div>
+          </div>
+        </div>
+
+        <!-- Authenticated Profile Identity & Menu -->
+        <div class="header-profile-wrap" id="headerProfileWrap">
+          <button type="button" class="auth-identity-pill" id="profileDropdownBtn" onclick="toggleProfileDropdown()" aria-haspopup="true" aria-expanded="false" title="Account Menu">
+            <div id="authHeaderAvatar" class="avatar avatar-sm">U</div>
+            <div class="auth-header-details">
+              <span id="authHeaderName" class="auth-header-name">User</span>
+              <span id="authHeaderRole" class="auth-header-badge">PATIENT</span>
+            </div>
+            <span class="dropdown-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div id="profileDropdownMenu" class="profile-dropdown" role="menu" aria-label="User Account Menu">
+            <div class="profile-dropdown-header">
+              <div id="profileDropdownAvatar" class="avatar avatar-md">U</div>
+              <div class="profile-dropdown-info">
+                <strong id="profileDropdownName">User</strong>
+                <span id="profileDropdownEmail" class="profile-dropdown-email">user@hospitrack.com</span>
+                <div class="mt-4">
+                  <span id="profileDropdownRoleBadge" class="badge badge-info profile-role-badge">PATIENT</span>
+                </div>
+              </div>
+            </div>
+            <div class="profile-dropdown-body">
+              <a href="javascript:void(0)" class="dropdown-item" role="menuitem" onclick="handleProfileMenuClick('view')">
+                <span>👤</span> <span>My Profile</span>
+              </a>
+              <a href="javascript:void(0)" id="headerDropdownEditProfileItem" class="dropdown-item" role="menuitem" onclick="handleProfileMenuClick('edit')">
+                <span>✏️</span> <span>Edit Profile</span>
+              </a>
+              <a href="javascript:void(0)" class="dropdown-item" role="menuitem" onclick="handleProfileMenuClick('settings')">
+                <span>⚙️</span> <span>Account Settings</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="javascript:void(0)" class="dropdown-item dropdown-item-danger" role="menuitem" onclick="handleLogoutAction()">
+                <span>🚪</span> <span>Logout</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Layout Grid -->
+    <div class="app-container">
+      <div id="mobileNavOverlay" class="mobile-nav-overlay no-print" onclick="closeMobileSidebar()"></div>
+      <aside id="appSidebar" class="app-sidebar no-print"></aside>
+      <main id="mainContentArea" class="main-content"></main>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 5. FUNCTIONAL MODALS                                      -->
+  <!-- ======================================================== -->
+
+  <!-- Add Doctor Modal (Hospital Admin Workspace) -->
+  <div id="addDoctorModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="addDoctorModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="addDoctorModalTitle">Add Physician to Hospital</h3>
+          <p class="modal-subtitle">Provision doctor profile and clinical access</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('addDoctorModal')" aria-label="Close">✕</button>
+      </div>
+      <form onsubmit="handleAddDoctorSubmit(event)">
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="addDocName">Doctor Name *</label>
+            <input type="text" id="addDocName" class="form-control" placeholder="e.g. Dr. Anita Rao" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addDocEmail">Email Address *</label>
+            <input type="email" id="addDocEmail" class="form-control" placeholder="a.rao@hospital.in" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addDocLicense">Medical License Number *</label>
+            <input type="text" id="addDocLicense" class="form-control" placeholder="MCI-99401" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addDocSpecialty">Specialty / Department *</label>
+            <input type="text" id="addDocSpecialty" class="form-control" placeholder="e.g. Cardiology" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addDocPhone">Phone Number</label>
+            <input type="tel" id="addDocPhone" class="form-control" placeholder="+91 98765 00000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addDocPassword">Temporary Password *</label>
+            <input type="password" id="addDocPassword" class="form-control" placeholder="Min 6 characters" minlength="6" required>
+          </div>
+        </div>
+        <div id="addDocAlert" class="alert-banner hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('addDoctorModal')">Cancel</button>
+          <button type="submit" id="addDocSubmitBtn" class="btn btn-primary">Add Doctor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Register Patient Admission Modal (Hospital Workspace) -->
+  <div id="hospitalRegisterPatientModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="hospitalRegisterPatientModalTitle">
+    <div class="modal-box modal-box-lg">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="hospitalRegisterPatientModalTitle">Patient Admission &amp; Registration</h3>
+          <p class="modal-subtitle">Admit new inpatient into facility bed inventory</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('hospitalRegisterPatientModal')" aria-label="Close">✕</button>
+      </div>
+      <form onsubmit="handleHospitalRegisterPatientSubmit(event)">
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="hospPatName">Patient Full Name *</label>
+            <input type="text" id="hospPatName" class="form-control" placeholder="e.g. Vikram Malhotra" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hospPatAge">Age *</label>
+            <input type="number" id="hospPatAge" class="form-control" min="1" max="120" placeholder="45" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hospPatGender">Gender *</label>
+            <select id="hospPatGender" class="form-control" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hospPatBloodGroup">Blood Group *</label>
+            <select id="hospPatBloodGroup" class="form-control" required>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hospPatPhone">Contact Phone</label>
+            <input type="tel" id="hospPatPhone" class="form-control" placeholder="+91 98111 00000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hospPatEmail">Email Address</label>
+            <input type="email" id="hospPatEmail" class="form-control" placeholder="patient@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hospPatDoctorSelect">Attending Doctor</label>
+            <select id="hospPatDoctorSelect" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hospPatEmergency">Emergency Contact</label>
+            <input type="text" id="hospPatEmergency" class="form-control" placeholder="+91 98111 99999 (Family)">
+          </div>
+          <div class="form-group full-width">
+            <label class="form-label" for="hospPatAddress">Residential Address</label>
+            <input type="text" id="hospPatAddress" class="form-control" placeholder="City Address">
+          </div>
+        </div>
+        <div id="hospPatAlert" class="alert-banner hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('hospitalRegisterPatientModal')">Cancel</button>
+          <button type="submit" id="hospPatSubmitBtn" class="btn btn-primary">Admit Patient</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Specialist Referral Modal -->
+  <div id="newReferralModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="newReferralModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="newReferralModalTitle">Create Specialist Referral</h3>
+          <p class="modal-subtitle">Transfer clinical care to specialist facility</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('newReferralModal')" aria-label="Close">✕</button>
+      </div>
+      <form onsubmit="handleNewReferralSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="legacyRefPatientSelect">Select Patient *</label>
+          <select id="legacyRefPatientSelect" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="legacyRefHospitalSelect">Destination Hospital *</label>
+          <select id="legacyRefHospitalSelect" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="legacyRefPriority">Priority Level *</label>
+          <select id="legacyRefPriority" class="form-control" required>
+            <option value="ROUTINE">ROUTINE</option>
+            <option value="URGENT">URGENT</option>
+            <option value="EMERGENCY">EMERGENCY</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="legacyRefReason">Reason for Referral *</label>
+          <textarea id="legacyRefReason" class="form-control" rows="3" placeholder="Clinical justification and required specialist evaluation..." required></textarea>
+        </div>
+        <div id="newRefAlert" class="alert-banner hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('newReferralModal')">Cancel</button>
+          <button type="submit" id="newRefSubmitBtn" class="btn btn-primary">Dispatch Referral</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Emergency Transfer Modal -->
+  <div id="emergencyTransferModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="emergencyTransferModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="emergencyTransferModalTitle">Emergency Facility Transfer</h3>
+          <p class="modal-subtitle">Instant triage and bed reallocation</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('emergencyTransferModal')" aria-label="Close">✕</button>
+      </div>
+      <form onsubmit="handleEmergencyTransferSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="trfPatientSelect">Select Inpatient *</label>
+          <select id="trfPatientSelect" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="trfHospitalSelect">Receiving Hospital *</label>
+          <select id="trfHospitalSelect" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="trfPriority">Triage Priority *</label>
+          <select id="trfPriority" class="form-control" required>
+            <option value="EMERGENCY">EMERGENCY (Immediate ICU/Trauma Bed)</option>
+            <option value="URGENT">URGENT (High Dependency)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="trfReason">Transfer Justification *</label>
+          <textarea id="trfReason" class="form-control" rows="3" placeholder="Condition severity, required equipment or bed requirements..." required></textarea>
+        </div>
+        <div id="trfAlert" class="alert-banner hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('emergencyTransferModal')">Cancel</button>
+          <button type="submit" id="trfSubmitBtn" class="btn btn-danger">Initiate Transfer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+  <!-- Confirm Logout Modal -->
+  <div id="confirmLogoutModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="confirmLogoutTitle">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h3 class="modal-title" id="confirmLogoutTitle">Confirm Sign Out</h3>
+        <button type="button" class="modal-close" onclick="closeModal('confirmLogoutModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-confirm-body">
+        <p class="modal-confirm-text">
+          Are you sure you want to log out of your Hospitrack session?
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('confirmLogoutModal')">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmLogoutBtn" onclick="executeLogoutAction()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Photo & Account Details Modal -->
+  <div id="userProfileModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="userProfileModalTitle">
+    <div class="modal-box modal-box-md">
+      <div class="modal-header">
+        <h3 class="modal-title" id="userProfileModalTitle">Account Profile</h3>
+        <button type="button" class="modal-close" onclick="closeModal('userProfileModal')" aria-label="Close">✕</button>
+      </div>
+      <div id="userProfileModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Certified Laboratory Report Modal -->
+  <div id="reportDetailModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="reportDetailModalTitle">
+    <div class="modal-box modal-box-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="reportDetailModalTitle">Diagnostic Laboratory Report</h3>
+        <button type="button" class="modal-close" onclick="closeModal('reportDetailModal')" aria-label="Close">✕</button>
+      </div>
+      <div id="reportDetailBody" class="modal-body-scrollable"></div>
+    </div>
+  </div>
+
+  <!-- Verified Hospital Review Modal -->
+  <div id="reviewModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+    <div class="modal-box modal-box-md">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="reviewModalTitle">Verified Hospital Review</h3>
+          <p class="modal-subtitle">Submit feedback for <strong id="reviewHospitalNameDisplay">Hospital</strong></p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('reviewModal')" aria-label="Close">✕</button>
+      </div>
+      <form id="reviewSubmitForm" onsubmit="handleReviewSubmit(event)">
+        <input type="hidden" id="reviewHospitalId">
+        <div id="reviewAlert" class="alert-banner hidden mb-16"></div>
+
+        <div class="form-group mb-16">
+          <label class="form-label" for="reviewRating">Care Rating (1 to 5 Stars) <span class="text-danger">*</span></label>
+          <select id="reviewRating" class="form-control" required>
+            <option value="5">★★★★★ — 5 Stars (Outstanding Care)</option>
+            <option value="4" selected>★★★★☆ — 4 Stars (Very Good)</option>
+            <option value="3">★★★☆☆ — 3 Stars (Satisfactory)</option>
+            <option value="2">★★☆☆☆ — 2 Stars (Needs Improvement)</option>
+            <option value="1">★☆☆☆☆ — 1 Star (Unsatisfactory)</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-16">
+          <label class="form-label" for="reviewTitle">Review Title <span class="text-danger">*</span></label>
+          <input type="text" id="reviewTitle" class="form-control" placeholder="e.g. Prompt specialist care and clear communication" required minlength="3">
+        </div>
+
+        <div class="form-group mb-16">
+          <label class="form-label" for="reviewText">Detailed Experience</label>
+          <textarea id="reviewText" class="form-control" rows="3" placeholder="Share details regarding your clinical consultation, hospital stay, or staff experience..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('reviewModal')">Cancel</button>
+          <button type="submit" id="submitReviewBtn" class="btn btn-primary">Submit Verified Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Credential Assistance & Institutional Policy Modal -->
+  <div id="credentialPolicyModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="credentialPolicyModalTitle">
+    <div class="modal-box modal-box-md">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="credentialPolicyModalTitle">🔒 Institutional Credential Governance</h3>
+          <p class="modal-subtitle">Authorized credential issuance and security recovery protocols</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('credentialPolicyModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="p-20">
+        <div class="alert-banner info mb-16" style="font-size: 0.84rem; line-height: 1.5;">
+          Under Hospitrack's strict healthcare credential governance policy, public self-registration and self-service password resets are restricted to protect sensitive patient records and hospital operational data.
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px;">
+            <div style="font-weight: 700; color: #1E293B; font-size: 0.85rem; margin-bottom: 3px;">👤 For Patients</div>
+            <p style="font-size: 0.78rem; color: #64748B; margin: 0;">Patient portal credentials and patient IDs (<code>PAT-xxx</code>) are issued upon hospital intake. If you need credential recovery or password reset, contact your admitting hospital's patient registration desk.</p>
+          </div>
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px;">
+            <div style="font-weight: 700; color: #1E293B; font-size: 0.85rem; margin-bottom: 3px;">🩺 For Medical Staff &amp; Doctors</div>
+            <p style="font-size: 0.78rem; color: #64748B; margin: 0;">Clinical physician and medical staff accounts are provisioned exclusively by your Hospital Administrator. Contact your facility's IT administration or Hospital Operations desk for credential reissuance.</p>
+          </div>
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px;">
+            <div style="font-weight: 700; color: #1E293B; font-size: 0.85rem; margin-bottom: 3px;">🏛️ For Hospital Administrators</div>
+            <p style="font-size: 0.78rem; color: #64748B; margin: 0;">Facility administrator accounts are onboarded and managed by the Super Administrator. To request credential updates or facility security resets, contact the Hospitrack Network Governance team.</p>
+          </div>
+        </div>
+        <div class="modal-actions" style="display: flex; justify-content: flex-end;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('credentialPolicyModal')">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Healthcare Facility & Role Help Desk Modal -->
+  <div id="helpDeskModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="helpDeskModalTitle">
+    <div class="modal-box modal-box-md">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="helpDeskModalTitle">Hospital Patient Desk Support</h3>
+          <p class="modal-subtitle" id="helpDeskModalSubtitle">Authorized clinical access &amp; facility assistance</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('helpDeskModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="p-20" id="helpDeskModalBody">
+        <!-- Dynamically populated based on role -->
+      </div>
+    </div>
+  </div>
+  <div id="verifyEmailModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="verifyEmailModalTitle">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="verifyEmailModalTitle">Verify Your Email</h3>
+          <p class="modal-subtitle">Enter the verification token from your email</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('verifyEmailModal')" aria-label="Close">✕</button>
+      </div>
+      <form onsubmit="handleVerifyEmailSubmit(event)">
+        <div class="form-group mb-16">
+          <label class="form-label" for="verifyTokenInput">Verification Token <span class="req-star">*</span></label>
+          <input type="text" id="verifyTokenInput" class="form-control" placeholder="Paste your verification token here" required>
+        </div>
+        <div id="verifyEmailAlert" class="alert-banner hidden mb-16"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('verifyEmailModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Verify Email</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reset Password Modal -->
+  <div id="resetPasswordModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="resetPasswordModalTitle">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="resetPasswordModalTitle">Set New Password</h3>
+          <p class="modal-subtitle">Create a new secure password for your account</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('resetPasswordModal')" aria-label="Close">✕</button>
+      </div>
+      <form onsubmit="handleResetPasswordSubmit(event)">
+        <input type="hidden" id="resetTokenInput">
+        <div class="form-group mb-16">
+          <label class="form-label" for="newPasswordInput">New Password <span class="req-star">*</span></label>
+          <div class="pwd-input-wrap">
+            <input type="password" id="newPasswordInput" class="form-control" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password">
+            <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('newPasswordInput', 'resetPwdToggleBtn')" id="resetPwdToggleBtn" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+        <div class="form-group mb-16">
+          <label class="form-label" for="confirmPasswordInput">Confirm Password <span class="req-star">*</span></label>
+          <input type="password" id="confirmPasswordInput" class="form-control" placeholder="Re-enter new password" required minlength="8" autocomplete="new-password">
+        </div>
+        <div id="resetPasswordAlert" class="alert-banner hidden mb-16"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('resetPasswordModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Reset Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Account Settings Modal (Password Change, Preferences) -->
+  <div id="accountSettingsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="accountSettingsModalTitle">
+    <div class="modal-box modal-box-md">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="accountSettingsModalTitle">Account Settings</h3>
+          <p class="modal-subtitle">Manage your security and account preferences</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('accountSettingsModal')" aria-label="Close">✕</button>
+      </div>
+      <div style="padding: 4px 0;">
+        <!-- Change Password Section -->
+        <div style="margin-bottom: 24px;">
+          <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">🔒 Change Password</h4>
+          <form id="changePasswordForm" onsubmit="handleChangePasswordSubmit(event)">
+            <div class="form-group mb-12">
+              <label class="form-label" for="currentPasswordInput">Current Password <span class="req-star">*</span></label>
+              <div class="pwd-input-wrap">
+                <input type="password" id="currentPasswordInput" class="form-control" placeholder="Your current password" required autocomplete="current-password">
+                <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('currentPasswordInput', 'curPwdBtn')" id="curPwdBtn" aria-label="Toggle">👁️</button>
+              </div>
+            </div>
+            <div class="form-group mb-12">
+              <label class="form-label" for="newPwdInput">New Password <span class="req-star">*</span></label>
+              <div class="pwd-input-wrap">
+                <input type="password" id="newPwdInput" class="form-control" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password">
+                <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('newPwdInput', 'newPwdBtn')" id="newPwdBtn" aria-label="Toggle">👁️</button>
+              </div>
+            </div>
+            <div class="form-group mb-16">
+              <label class="form-label" for="confirmNewPwdInput">Confirm New Password <span class="req-star">*</span></label>
+              <input type="password" id="confirmNewPwdInput" class="form-control" placeholder="Re-enter new password" required minlength="8" autocomplete="new-password">
+            </div>
+            <div id="changePwdAlert" class="alert-banner hidden mb-12"></div>
+            <button type="submit" id="changePwdBtn" class="btn btn-primary">Update Password</button>
+          </form>
+        </div>
+
+        <!-- Account Info Section -->
+        <div>
+          <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">⚙️ Account Information</h4>
+          <div id="accountSettingsInfo" style="font-size: 0.85rem; color: var(--text-secondary);">
+            <p>Loading account information...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patient & Hospital Registration View Container -->
+  <div id="registerViewContainer" class="auth-page-wrapper hidden">
+    <div class="auth-split-container">
+      <!-- Left Brand Pane -->
+      <div class="auth-brand-pane">
+        <div class="auth-brand-logo-hero">
+          <div class="auth-brand-logo-icon">H+</div>
+          <div class="auth-brand-text">
+            <h2>HOSPITRACK</h2>
+            <p>Hospital Referral &amp; Patient Record Management</p>
+          </div>
+        </div>
+        <div class="auth-brand-hero-msg">
+          <h1>Join the network.</h1>
+          <p>Register as a patient to access your complete health journey, or register your hospital facility to coordinate care across the network.</p>
+          <ul class="auth-brand-features-list">
+            <li><span>✓</span> Secure longitudinal health records</li>
+            <li><span>✓</span> Multi-hospital care coordination</li>
+            <li><span>✓</span> Real-time bed &amp; referral tracking</li>
+          </ul>
+        </div>
+        <div class="auth-brand-footer">
+          <span>Hospitrack Care Network &bull; Secure Healthcare SaaS</span>
+        </div>
+      </div>
+
+      <!-- Right Registration Card -->
+      <div class="auth-card-pane">
+        <div class="auth-card-wrapper">
+          <div class="mb-16">
+            <button type="button" class="btn-link-sm" onclick="showLoginView()">
+              &larr; Back to Sign In
+            </button>
+          </div>
+
+        <div class="mb-20">
+          <h2 class="auth-title-h2">Create Account</h2>
+          <p class="text-secondary-sm mt-4">Register as a patient or healthcare facility.</p>
+        </div>
+
+        <!-- Registration Type Tabs -->
+        <div class="role-tabs-modern" role="tablist">
+          <button type="button" role="tab" class="role-tab active" id="regTabPatient" onclick="switchRegistrationType('PATIENT')">
+            <span>👤</span> Patient
+          </button>
+          <button type="button" role="tab" class="role-tab" id="regTabHospital" onclick="switchRegistrationType('HOSPITAL')">
+            <span>🏥</span> Hospital
+          </button>
+        </div>
+
+        <!-- Patient Registration Form -->
+        <form id="patientRegisterForm" onsubmit="handlePatientRegisterSubmit(event)" novalidate>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label" for="regPatName">Full Name <span class="req-star">*</span></label>
+              <input type="text" id="regPatName" class="form-control" placeholder="e.g. Rahul Sharma" required minlength="2">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatEmail">Email Address <span class="req-star">*</span></label>
+              <input type="email" id="regPatEmail" class="form-control" placeholder="rahul@example.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatPhone">Phone Number <span class="req-star">*</span></label>
+              <input type="tel" id="regPatPhone" class="form-control" placeholder="+91 98765 43210" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatDob">Date of Birth</label>
+              <input type="date" id="regPatDob" class="form-control" autocomplete="bday">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatGender">Gender</label>
+              <select id="regPatGender" class="form-control">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatBloodGroup">Blood Group</label>
+              <select id="regPatBloodGroup" class="form-control">
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="regPatAddress">Address</label>
+              <input type="text" id="regPatAddress" class="form-control" placeholder="Residential address" autocomplete="street-address">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatEmergencyContact">Emergency Contact</label>
+              <input type="text" id="regPatEmergencyContact" class="form-control" placeholder="+91 98111 99999 (Family)">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatUsername">Username (optional)</label>
+              <input type="text" id="regPatUsername" class="form-control" placeholder="e.g. rahul.sharma" autocomplete="username">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatPassword">Password <span class="req-star">*</span></label>
+              <div class="pwd-input-wrap">
+                <input type="password" id="regPatPassword" class="form-control" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password" oninput="updatePasswordStrength('regPatPassword','regPatStrengthBar','regPatStrengthLabel')">
+                <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('regPatPassword','regPatPwdBtn')" id="regPatPwdBtn" aria-label="Toggle">👁️</button>
+              </div>
+              <div class="strength-bar-bg" id="regPatStrengthBar"></div>
+              <span id="regPatStrengthLabel" style="font-size:0.74rem;color:var(--text-dim);">Password strength</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPatConfirmPassword">Confirm Password <span class="req-star">*</span></label>
+              <input type="password" id="regPatConfirmPassword" class="form-control" placeholder="Re-enter password" required minlength="8" autocomplete="new-password">
+            </div>
+          </div>
+          <div id="registerAlertBanner" class="alert-banner hidden mb-16"></div>
+          <button type="submit" id="patRegSubmitBtn" class="btn btn-primary btn-block btn-lg mt-8">Create Patient Account</button>
+          <p class="text-secondary-sm mt-16" style="text-align:center;">Already have an account? <button type="button" class="btn-link-sm" onclick="showLoginView()">Sign in</button></p>
+        </form>
+
+        <!-- Hospital Registration Form (hidden by default) -->
+        <form id="hospitalRegisterForm" class="hidden" onsubmit="handleHospitalRegisterSubmit(event)" novalidate>
+          <div class="form-grid-2col">
+            <div class="form-group full-width">
+              <label class="form-label" for="regHospName">Hospital / Facility Name <span class="req-star">*</span></label>
+              <input type="text" id="regHospName" class="form-control" placeholder="e.g. St. Mary's Medical Center" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospNumber">Registration Number <span class="req-star">*</span></label>
+              <input type="text" id="regHospNumber" class="form-control" placeholder="e.g. CGH-01" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospType">Hospital Type</label>
+              <select id="regHospType" class="form-control">
+                <option value="GENERAL">General Hospital</option>
+                <option value="SPECIALTY">Specialty Hospital</option>
+                <option value="MULTI_SPECIALTY">Multi-Specialty Hospital</option>
+                <option value="TEACHING">Teaching Hospital</option>
+                <option value="CLINIC">Clinic / Polyclinic</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospEmail">Admin Email <span class="req-star">*</span></label>
+              <input type="email" id="regHospEmail" class="form-control" placeholder="admin@hospital.in" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospPhone">Contact Phone <span class="req-star">*</span></label>
+              <input type="tel" id="regHospPhone" class="form-control" placeholder="+91 98765 43210" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospBeds">Total Beds</label>
+              <input type="number" id="regHospBeds" class="form-control" placeholder="100" min="1" value="100">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="regHospAddress">Address</label>
+              <input type="text" id="regHospAddress" class="form-control" placeholder="Full street address">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospCity">City</label>
+              <input type="text" id="regHospCity" class="form-control" placeholder="e.g. Mumbai">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospState">State</label>
+              <input type="text" id="regHospState" class="form-control" placeholder="e.g. Maharashtra">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospPincode">Pincode</label>
+              <input type="text" id="regHospPincode" class="form-control" placeholder="400001">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospPassword">Admin Password <span class="req-star">*</span></label>
+              <div class="pwd-input-wrap">
+                <input type="password" id="regHospPassword" class="form-control" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password">
+                <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('regHospPassword','regHospPwdBtn')" id="regHospPwdBtn" aria-label="Toggle">👁️</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regHospConfirmPassword">Confirm Password <span class="req-star">*</span></label>
+              <input type="password" id="regHospConfirmPassword" class="form-control" placeholder="Re-enter password" required minlength="8" autocomplete="new-password">
+            </div>
+          </div>
+          <div class="alert-banner info mb-16" style="display:block;">
+            ⓘ Hospital registrations require Super Admin approval before login access is granted.
+          </div>
+          <button type="submit" id="hospRegSubmitBtn" class="btn btn-primary btn-block btn-lg mt-8">Submit Hospital Registration</button>
+          <p class="text-secondary-sm mt-16" style="text-align:center;">Already have an account? <button type="button" class="btn-link-sm" onclick="showLoginView()">Sign in</button></p>
+        </form>
+
+        <!-- Registration Success Screen -->
+        <div id="registerSuccessScreen" class="hidden" style="text-align: center; padding: 2rem 0;">
+          <div style="font-size: 3rem; margin-bottom: 16px;">✅</div>
+          <h3 id="regSuccessTitle" class="mb-8">Account created successfully.</h3>
+          <p id="regSuccessDesc" class="text-secondary-sm mb-24">Your account is ready. You can now sign in.</p>
+          <button type="button" class="btn btn-primary" onclick="showLoginView()">Sign In to Your Account</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Global Modals Container -->
+  <div id="globalModalContainer"></div>
+
+  <!-- Toast Notification Hub -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Universal Isolated Printable Medical Record Container & Legacy Fallback -->
+  <div id="printable-medical-record" class="printable-document-container" aria-hidden="true"></div>
+  <div id="hospitrackPrintArea" class="printable-document-container" aria-hidden="true" style="display:none;"></div>
+
+  <!-- Core Scripts -->
+  <script src="/env-config.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/authService.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/modules/clinicalSafety.js?v=2.5"></script>
+  <script src="/js/modules/evsBedManager.js?v=2.5"></script>
+  <script src="/js/modules/documentUtils.js"></script>
+  <script src="/js/modules/printTemplates.js"></script>
+  <script src="/js/modules/printService.js"></script>
+  <script src="/js/modules/scrollSync.js"></script>
+  <script src="/js/workspaceRenderer.js"></script>
+  <script src="/js/components/patientDashboard.js"></script>
+  <script src="/js/components/doctorDashboard.js"></script>
+  <script src="/js/components/hospitalDashboard.js"></script>
+  <script src="/js/components/adminDashboard.js"></script>
+  <script src="/js/components/auditLogger.js"></script>
+  <script src="/js/components/departmentWorkspace.js"></script>
+  <script src="/js/components/modalManager.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

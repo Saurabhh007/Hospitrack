@@ -1,0 +1,15 @@
+.git
+.github
+.gemini
+.vscode
+backup_baseline
+node_modules
+runtime/
+scratch/
+backend/target/
+backend/.mvn/
+*.log
+*.tmp
+.env
+.env.*
+

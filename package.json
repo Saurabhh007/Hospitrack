@@ -1,0 +1,26 @@
+{
+  "name": "hospitrack-platform",
+  "version": "2.4.0",
+  "description": "Hospitrack — Hospital Referral and Patient Record Management System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "node server.js",
+    "py-serve": "python server.py",
+    "build:backend": "node -e \"const { spawnSync } = require('child_process'); const isWin = process.platform === 'win32'; const cmd = isWin ? 'mvnw.cmd' : './mvnw'; const res = spawnSync(cmd, ['clean', 'package', '-DskipTests'], { cwd: 'backend', stdio: 'inherit', shell: true }); process.exit(res.status);\"",
+    "build": "npm run build:backend",
+    "test": "node test.js",
+    "deploy:vercel": "npx vercel --prod",
+    "deploy:netlify": "npx netlify-cli deploy --prod --dir=."
+  },
+  "keywords": [
+    "healthcare",
+    "hospital-management",
+    "referral-system",
+    "patient-records",
+    "audit-trail"
+  ],
+  "author": "Hospitrack Engineering Team",
+  "license": "MIT"
+}

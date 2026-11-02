@@ -1,0 +1,46 @@
+server:
+  port: ${SERVER_PORT:${PORT:8080}}
+  shutdown: graceful
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:${JDBC_DATABASE_URL:}}}
+    username: ${DB_USERNAME:${DATABASE_USERNAME:${SPRING_DATASOURCE_USERNAME:}}}
+    password: ${DB_PASSWORD:${DATABASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD:}}}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:5}
+      minimum-idle: ${DB_POOL_MIN:1}
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 20000
+  jpa:
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration-ms: ${JWT_EXPIRATION_MS:3600000} # 1 hour in prod
+    refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000} # 7 days
+  cors:
+    allowed-origins: ${FRONTEND_URL:${ALLOWED_ORIGINS:http://localhost:8000,http://127.0.0.1:8000,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:10000,http://127.0.0.1:10000,https://*.vercel.app,https://*.netlify.app}}
+  brevo:
+    api-key: ${BREVO_API_KEY:}
+    sender-email: ${BREVO_SENDER_EMAIL:noreply@hospitrack.com}
+    sender-name: ${BREVO_SENDER_NAME:Hospitrack Production}

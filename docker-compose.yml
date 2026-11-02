@@ -1,0 +1,62 @@
+services:
+  # ==============================================================================
+  # HOSPITRACK POSTGRESQL 16 PRODUCTION-LIKE DATABASE SERVICE
+  # ==============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: hospitrack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hospitrack_db
+      POSTGRES_USER: hospitrack
+      POSTGRES_PASSWORD: hospitrack_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - hospitrack_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hospitrack -d hospitrack_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ==============================================================================
+  # HOSPITRACK SPRING BOOT BACKEND SERVICE (INDEPENDENT CONTAINER)
+  # ==============================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: hospitrack-backend:phase4
+    container_name: hospitrack-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      PORT: 8080
+      SERVER_PORT: 8080
+      DATABASE_URL: postgresql://hospitrack:hospitrack_secret@postgres:5432/hospitrack_db
+      DB_USERNAME: hospitrack
+      DB_PASSWORD: hospitrack_secret
+      HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: hospitrack_super_secret_jwt_signing_key_at_least_256_bits_length_for_hmac_sha256_security_production_2026
+      JWT_EXPIRATION_MS: 3600000
+      JWT_REFRESH_EXPIRATION_MS: 604800000
+      FRONTEND_URL: http://localhost:8000,http://127.0.0.1:8000,http://localhost:3000,http://127.0.0.1:3000,https://*.vercel.app,https://*.netlify.app
+      ALLOWED_ORIGINS: http://localhost:8000,http://127.0.0.1:8000,http://localhost:3000,http://127.0.0.1:3000,https://*.vercel.app,https://*.netlify.app
+      JAVA_OPTS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=25.0 -XX:+ExitOnOutOfMemoryError"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8080/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  hospitrack_pgdata:
+    driver: local
