@@ -177,7 +177,31 @@ public class ClinicalSafetyAndEvsTests {
     @Test
     @DisplayName("[EVS-1] Environmental Services Bed Turnover Pipeline: Dispatch -> Complete -> Inspect")
     void testEvsBedTurnoverPipeline() throws Exception {
-        String bedId = "BED-HOSP-101-GEN-02";
+        // Trigger lazy bed inventory initialization and select an available bed
+        MvcResult bedsRes = mockMvc.perform(get("/api/hospitals/HOSP-101/beds")
+                .header("Authorization", "Bearer " + hospToken))
+                .andExpect(status().isOk())
+                .andReturn();
+        JsonNode bedsData = objectMapper.readTree(bedsRes.getResponse().getContentAsString()).path("data");
+        assertTrue(bedsData.isArray() && !bedsData.isEmpty(), "Hospital HOSP-101 bed inventory should be initialized");
+
+        String bedId = null;
+        for (JsonNode b : bedsData) {
+            if ("BED-HOSP-101-GEN-02".equals(b.path("id").asText())
+                    && "AVAILABLE".equalsIgnoreCase(b.path("status").asText())) {
+                bedId = b.path("id").asText();
+                break;
+            }
+        }
+        if (bedId == null) {
+            for (JsonNode b : bedsData) {
+                if ("AVAILABLE".equalsIgnoreCase(b.path("status").asText())) {
+                    bedId = b.path("id").asText();
+                    break;
+                }
+            }
+        }
+        assertNotNull(bedId, "Expected an AVAILABLE bed in HOSP-101 for EVS turnover pipeline");
 
         // 1. Dispatch Housekeeper
         EvsDispatchRequest dispatch = new EvsDispatchRequest("Ramesh Kumar (EVS)", "Terminal Disinfection", "Routine post-discharge cleaning");

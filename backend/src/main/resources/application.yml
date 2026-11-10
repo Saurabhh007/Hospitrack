@@ -44,3 +44,5 @@ app:
   admin:
     initial-email: ${INITIAL_ADMIN_EMAIL:admin@hospitrack.com}
     initial-password: ${INITIAL_ADMIN_PASSWORD:Admin@Hospitrack2026!}
+  rate-limit:
+    max-requests-per-minute: ${RATE_LIMIT_MAX_REQUESTS_PER_MINUTE:60}

@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   test-and-verify:
-    name: Build & Verify (Java 17, Node.js 20 & Docker)
+    name: Build & Verify (Java 25, Node.js 20 & Docker)
     runs-on: ubuntu-latest
 
     services:
@@ -34,10 +34,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 17 (Eclipse Temurin)
+      - name: Set up Java 25 (Eclipse Temurin)
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '25'
           distribution: 'temurin'
           cache: 'maven'
 

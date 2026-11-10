@@ -1,12 +1,12 @@
 # ==============================================================================
 # HOSPITRACK HEALTHCARE PLATFORM — PRODUCTION UNIFIED SINGLE-SERVICE DOCKERFILE
-# Multi-stage build: Maven (Java 17) -> Node.js 20 (with Java 17 JRE)
+# Multi-stage build: Maven (Java 25) -> Node.js 20 (with Java 25 JRE)
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# STAGE 1: Build Spring Boot Backend Artifact (Maven + Eclipse Temurin JDK 17)
+# STAGE 1: Build Spring Boot Backend Artifact (Maven + Eclipse Temurin JDK 25)
 # ------------------------------------------------------------------------------
-FROM maven:3.9.6-eclipse-temurin-17 AS backend-builder
+FROM maven:3.9.6-eclipse-temurin-25 AS backend-builder
 
 WORKDIR /build/backend
 
@@ -19,17 +19,25 @@ COPY backend/src ./src
 RUN mvn clean package -DskipTests
 
 # ------------------------------------------------------------------------------
-# STAGE 2: Production Unified Single-Service Runtime (Node.js 20 + Java 17 JRE)
+# STAGE 2: Production Unified Single-Service Runtime (Node.js 20 + Java 25 JRE)
 # ------------------------------------------------------------------------------
 FROM node:20-bookworm-slim
 
-# Install OpenJDK 17 headless JRE and curl for container health checks
+# Install Java 25 JRE from Eclipse Temurin and curl for container health checks
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openjdk-17-jre-headless \
     curl \
     ca-certificates \
+    tar \
+    gzip \
+    && mkdir -p /opt/java25 \
+    && curl -fsSL "https://api.adoptium.net/v3/binary/latest/25/ga/linux/x64/jre/hotspot/normal/eclipse" -o /tmp/java25.tar.gz \
+    && tar -xzf /tmp/java25.tar.gz --strip-components=1 -C /opt/java25 \
+    && rm -f /tmp/java25.tar.gz \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+ENV JAVA_HOME=/opt/java25
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 WORKDIR /app
 
@@ -70,4 +78,3 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
 
 # Start the unified Node.js supervisor server which orchestrates the Spring Boot backend
 CMD ["node", "server.js"]
-

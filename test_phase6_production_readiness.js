@@ -143,7 +143,7 @@ async function runPhase6Verification() {
     const workflowPath = path.join(__dirname, '.github', 'workflows', 'ci-cd.yml');
     assert(fs.existsSync(workflowPath), '.github/workflows/ci-cd.yml exists');
     const workflowContent = fs.readFileSync(workflowPath, 'utf8');
-    assert(workflowContent.includes('actions/setup-java@v4') && workflowContent.includes("java-version: '17'"), 'Workflow sets up Java 17');
+    assert(workflowContent.includes('actions/setup-java@v4') && workflowContent.includes("java-version: '25'"), 'Workflow sets up Java 25');
     assert(workflowContent.includes('actions/setup-node@v4') && workflowContent.includes("node-version: '20'"), 'Workflow sets up Node.js 20');
     assert(workflowContent.includes('mvn test'), 'Workflow builds Spring Boot and executes backend test suite');
     assert(workflowContent.includes('services:') && workflowContent.includes('postgres:16-alpine'), 'Workflow provisions isolated PostgreSQL service container');

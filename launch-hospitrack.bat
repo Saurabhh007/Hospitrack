@@ -42,13 +42,13 @@ if not exist "%PROJECT_ROOT%server.js" (
 echo       Project structure verified ............................. [PASS]
 
 :: [2/7] Check Java Environment
-echo [2/7] Checking Java 17+ Runtime...
+echo [2/7] Checking Java 25+ Runtime...
 where java >nul 2>nul
 if %errorlevel% neq 0 (
     echo.
     echo ==============================================================================
     echo [ERROR] Java is not detected in your system PATH.
-    echo Hospitrack Spring Boot backend requires Java 17 or newer.
+    echo Hospitrack Spring Boot backend requires Java 25 or newer.
     echo ==============================================================================
     pause
     exit /b 1

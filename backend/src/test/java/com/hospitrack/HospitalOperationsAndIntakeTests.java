@@ -1,10 +1,12 @@
 package com.hospitrack;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hospitrack.dto.*;
 import com.hospitrack.entity.*;
 import com.hospitrack.repository.*;
 import com.hospitrack.security.JwtTokenProvider;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -138,6 +141,73 @@ public class HospitalOperationsAndIntakeTests {
                 bedRepository.save(b);
             });
         }
+    }
+
+    @AfterEach
+    void restoreSharedFixtures() {
+        Patient baselinePat301 = patientRepository.findById("PAT-301")
+                .orElseGet(() -> new Patient(
+                        "PAT-301", "John Doe", "Male", 42, "O+", "+91 98111 00001",
+                        "john.doe@email.com", "Flat 402, Sunrise Heights, New Delhi",
+                        "+91 98111 99991 (Jane Doe - Spouse)", "HOSP-101", "DOC-201"
+                ));
+        baselinePat301.setName("John Doe");
+        baselinePat301.setGender("Male");
+        baselinePat301.setAge(42);
+        baselinePat301.setBloodGroup("O+");
+        baselinePat301.setContact("+91 98111 00001");
+        baselinePat301.setEmail("john.doe@email.com");
+        baselinePat301.setAddress("Flat 402, Sunrise Heights, New Delhi");
+        baselinePat301.setEmergencyContact("+91 98111 99991 (Jane Doe - Spouse)");
+        baselinePat301.setEmergencyContactName("Jane Doe");
+        baselinePat301.setEmergencyContactPhone("+91 98111 99991");
+        baselinePat301.setEmergencyContactRelation("Spouse");
+        baselinePat301.setCurrentHospitalId("HOSP-101");
+        baselinePat301.setPrimaryDoctorId("DOC-201");
+        baselinePat301.setStatus("CHECKED_IN");
+        baselinePat301.setWard("General Medicine Ward");
+        baselinePat301.setBedNumber("GEN-01");
+        baselinePat301.setPhotoUrl(null);
+        baselinePat301.setDischargedAt(null);
+        patientRepository.save(baselinePat301);
+
+        User patUser = userRepository.findById("USER-PAT-301")
+                .or(() -> userRepository.findByEmailIgnoreCase("john.doe@email.com"))
+                .orElseGet(() -> new User("USER-PAT-301", "John Doe", "john.doe@email.com", passwordEncoder.encode("Patient@123!"), Role.PATIENT));
+        patUser.setName("John Doe");
+        patUser.setEmail("john.doe@email.com");
+        if (patUser.getPasswordHash() == null || !passwordEncoder.matches("Patient@123!", patUser.getPasswordHash())) {
+            patUser.setPasswordHash(passwordEncoder.encode("Patient@123!"));
+        }
+        patUser.setRole(Role.PATIENT);
+        patUser.setStatus(AccountStatus.ACTIVE);
+        patUser.setEmailVerified(true);
+        patUser.setPatientId("PAT-301");
+        patUser.setHospitalId("HOSP-101");
+        patUser.setPhone(null);
+        patUser.setAvatarUrl(null);
+        userRepository.save(patUser);
+
+        doctorRepository.findById("DOC-201").ifPresent(doc -> {
+            doc.setStatus("ACTIVE");
+            doc.setHospitalId("HOSP-101");
+            doctorRepository.save(doc);
+        });
+
+        User docUser = userRepository.findById("USER-DOC-201")
+                .or(() -> userRepository.findByEmailIgnoreCase("s.sharma@citygeneral.in"))
+                .orElseGet(() -> new User("USER-DOC-201", "Dr. Sarah Sharma", "s.sharma@citygeneral.in", passwordEncoder.encode("Doctor@123!"), Role.DOCTOR));
+        docUser.setName("Dr. Sarah Sharma");
+        docUser.setEmail("s.sharma@citygeneral.in");
+        if (docUser.getPasswordHash() == null || !passwordEncoder.matches("Doctor@123!", docUser.getPasswordHash())) {
+            docUser.setPasswordHash(passwordEncoder.encode("Doctor@123!"));
+        }
+        docUser.setRole(Role.DOCTOR);
+        docUser.setStatus(AccountStatus.ACTIVE);
+        docUser.setEmailVerified(true);
+        docUser.setDoctorId("DOC-201");
+        docUser.setHospitalId("HOSP-101");
+        userRepository.save(docUser);
     }
 
     @Test
@@ -340,15 +410,34 @@ public class HospitalOperationsAndIntakeTests {
     @Test
     @DisplayName("9. Ward & Bed Management: Assign Bed, Maintenance Lifecycle, and Discharge Auto-Transition")
     void testBedManagementLifecycle() throws Exception {
-        // 1. Get Beds for Hospital 101
-        mockMvc.perform(get("/api/hospitals/HOSP-101/beds")
+        // 1. Get Beds for Hospital 101 and pick two distinct AVAILABLE beds
+        MvcResult bedsRes = mockMvc.perform(get("/api/hospitals/HOSP-101/beds")
                         .header("Authorization", "Bearer " + hosp1AdminToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", hasSize(greaterThan(0))));
+                .andExpect(jsonPath("$.data", hasSize(greaterThan(0))))
+                .andReturn();
+
+        JsonNode bedsArray = objectMapper.readTree(bedsRes.getResponse().getContentAsString()).path("data");
+        java.util.List<String> availableBedNumbers = new java.util.ArrayList<>();
+        for (JsonNode b : bedsArray) {
+            if ("AVAILABLE".equalsIgnoreCase(b.path("status").asText())
+                    && b.path("bedNumber").asText("").startsWith("GEN-")) {
+                availableBedNumbers.add(b.path("bedNumber").asText());
+            }
+        }
+        for (JsonNode b : bedsArray) {
+            String bedNum = b.path("bedNumber").asText("");
+            if ("AVAILABLE".equalsIgnoreCase(b.path("status").asText()) && !availableBedNumbers.contains(bedNum)) {
+                availableBedNumbers.add(bedNum);
+            }
+        }
+        assertTrue(availableBedNumbers.size() >= 2, "Expected at least two AVAILABLE beds in HOSP-101");
+        String assignBedNumber = availableBedNumbers.get(0);
+        String maintBedNumber = availableBedNumbers.get(1);
 
         // 2. Assign Bed to Patient
         AssignBedRequest assignReq = new AssignBedRequest();
-        assignReq.setBedId("GEN-06");
+        assignReq.setBedId(assignBedNumber);
         assignReq.setPatientId("PAT-301");
         assignReq.setDoctorId("DOC-201");
 
@@ -361,7 +450,7 @@ public class HospitalOperationsAndIntakeTests {
                 .andExpect(jsonPath("$.data.patientId").value("PAT-301"));
 
         // 3. Mark a bed for Maintenance manually
-        mockMvc.perform(post("/api/hospitals/HOSP-101/beds/GEN-04/maintenance")
+        mockMvc.perform(post("/api/hospitals/HOSP-101/beds/" + maintBedNumber + "/maintenance")
                         .header("Authorization", "Bearer " + hosp1AdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"reason\":\"Biomedical sensor calibration\"}"))
@@ -369,7 +458,7 @@ public class HospitalOperationsAndIntakeTests {
                 .andExpect(jsonPath("$.data.status").value("MAINTENANCE"));
 
         // 4. Release bed from Maintenance
-        mockMvc.perform(post("/api/hospitals/HOSP-101/beds/GEN-04/release-maintenance")
+        mockMvc.perform(post("/api/hospitals/HOSP-101/beds/" + maintBedNumber + "/release-maintenance")
                         .header("Authorization", "Bearer " + hosp1AdminToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.status").value("AVAILABLE"));
@@ -390,8 +479,8 @@ public class HospitalOperationsAndIntakeTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.status").value("DISCHARGED"));
 
-        // Verify Bed GEN-06 is now in MAINTENANCE (not AVAILABLE) pending cleaning
-        Bed bed = bedRepository.findByHospitalIdAndBedNumber("HOSP-101", "GEN-06").orElseThrow();
+        // Verify assigned bed is now in MAINTENANCE (not AVAILABLE) pending cleaning
+        Bed bed = bedRepository.findByHospitalIdAndBedNumber("HOSP-101", assignBedNumber).orElseThrow();
         assertEquals("MAINTENANCE", bed.getStatus());
         assertNull(bed.getPatientId());
     }

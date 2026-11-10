@@ -1,13 +1,13 @@
 # ==============================================================================
 # HOSPITRACK HEALTHCARE PLATFORM — DEDICATED SPRING BOOT BACKEND DOCKERFILE
-# Multi-stage production container build (Maven 3.9.6 + Java 17 -> Eclipse Temurin JRE 17)
+# Multi-stage production container build (Maven 3.9.6 + Java 25 -> Eclipse Temurin JRE 25)
 # Non-root user, memory-optimized, healthcheck enabled, graceful termination safe
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
 # STAGE 1: Build Spring Boot Application Artifact
 # ------------------------------------------------------------------------------
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+FROM maven:3.9.6-eclipse-temurin-25 AS builder
 
 WORKDIR /build
 
@@ -22,7 +22,7 @@ RUN mvn clean package -DskipTests
 # ------------------------------------------------------------------------------
 # STAGE 2: Lightweight Production Runtime Image
 # ------------------------------------------------------------------------------
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:25-jre-jammy
 
 # Install curl for container healthcheck probe and clean package manager cache
 RUN apt-get update && apt-get install -y --no-install-recommends \

@@ -1,7 +1,7 @@
 services:
   # ==============================================================================
   # Hospitrack Healthcare SaaS Platform — Independent Backend Service
-  # Dedicated Java 17 Spring Boot Container on Render
+  # Dedicated Java 25 Spring Boot Container on Render
   # ==============================================================================
   - type: web
     name: hospitrack-backend

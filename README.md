@@ -18,7 +18,7 @@ Hospitrack is a modern, enterprise-ready, role-based healthcare coordination pla
                                 HTTPS REST + JWT
                                        v
                +-------------------------------------------------+
-               |           Spring Boot 3.3.x (Java 17)           |
+               |           Spring Boot 3.3.x (Java 25)           |
                |              Spring Security 6                  |
                |     [BCrypt Hashing] â€¢ [RBAC] â€¢ [Rate Limit]    |
                +-------------------------------------------------+
@@ -54,7 +54,7 @@ Hospitrack is a modern, enterprise-ready, role-based healthcare coordination pla
 
 ### Prerequisites
 
-- **Java 17** (OpenJDK / Eclipse Temurin)
+- **Java 25 LTS** (OpenJDK / Eclipse Temurin)
 - **Node.js 18+**
 
 ### Launching Local Environment
@@ -116,7 +116,7 @@ Hospitrack is configured for zero-friction modern decoupled cloud deployment:
 
 ```text
 Frontend  --> Vercel Edge Network (Static Hosting via vercel.json)
-Backend   --> Railway Container Service (Docker / Java 17 via railway.json)
+Backend   --> Railway Container Service (Docker / Java 25 via railway.json)
 Database  --> Managed PostgreSQL 16 (Encrypted connection pool)
 CI/CD     --> GitHub Actions (.github/workflows/ci-cd.yml)
 ```
@@ -160,4 +160,4 @@ For local evaluation, see [DEMO_CREDENTIALS.md](DEMO_CREDENTIALS.md).
 
 ## Presentation Explanation for Evaluation
 
-> *"Hospitrack uses a decoupled, role-based healthcare architecture. The frontend is served as a high-performance Vanilla JavaScript Single Page Application from Vercel's global edge network, communicating securely over HTTPS REST with a containerized Java 17 Spring Boot backend hosted on Railway. Passwords are encrypted using BCrypt, and API communications are secured via stateless JWT Bearer tokens with strict role-based access control and multi-tenant hospital data isolation. PostgreSQL stores clinical and audit records, while GitHub Actions provides continuous integration and deployment."*
+> *"Hospitrack uses a decoupled, role-based healthcare architecture. The frontend is served as a high-performance Vanilla JavaScript Single Page Application from Vercel's global edge network, communicating securely over HTTPS REST with a containerized Java 25 Spring Boot backend hosted on Railway. Passwords are encrypted using BCrypt, and API communications are secured via stateless JWT Bearer tokens with strict role-based access control and multi-tenant hospital data isolation. PostgreSQL stores clinical and audit records, while GitHub Actions provides continuous integration and deployment."*

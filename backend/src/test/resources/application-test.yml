@@ -23,3 +23,5 @@ app:
   admin:
     initial-email: admin@hospitrack.com
     initial-password: Admin@Hospitrack2026!
+  rate-limit:
+    max-requests-per-minute: 10000

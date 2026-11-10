@@ -44,3 +44,5 @@ app:
     api-key: ${BREVO_API_KEY:}
     sender-email: ${BREVO_SENDER_EMAIL:noreply@hospitrack.com}
     sender-name: ${BREVO_SENDER_NAME:Hospitrack Production}
+  rate-limit:
+    max-requests-per-minute: ${RATE_LIMIT_MAX_REQUESTS_PER_MINUTE:60}

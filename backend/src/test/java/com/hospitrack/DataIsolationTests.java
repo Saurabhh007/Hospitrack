@@ -1,9 +1,13 @@
 package com.hospitrack;
 
+import com.hospitrack.entity.AccountStatus;
+import com.hospitrack.entity.Patient;
 import com.hospitrack.entity.Role;
 import com.hospitrack.entity.User;
+import com.hospitrack.repository.PatientRepository;
 import com.hospitrack.repository.UserRepository;
 import com.hospitrack.security.JwtTokenProvider;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +34,9 @@ public class DataIsolationTests {
     private UserRepository userRepository;
 
     @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
@@ -43,14 +50,22 @@ public class DataIsolationTests {
     @BeforeEach
     void setUp() {
         // Patient A
-        if (!userRepository.existsByEmailIgnoreCase("patientA@test.com")) {
-            patientUserA = new User("USER-PAT-A", "Patient Alice", "patientA@test.com", passwordEncoder.encode("Pass123!"), Role.PATIENT);
-            patientUserA.setPatientId("PAT-301");
-            patientUserA.setHospitalId("HOSP-101");
-            userRepository.save(patientUserA);
-        } else {
-            patientUserA = userRepository.findByEmailIgnoreCase("patientA@test.com").orElseThrow();
+        patientUserA = userRepository.findById("USER-PAT-A")
+                .or(() -> userRepository.findByEmailIgnoreCase("patientA@test.com"))
+                .orElseGet(() -> new User("USER-PAT-A", "Patient Alice", "patientA@test.com", passwordEncoder.encode("Pass123!"), Role.PATIENT));
+        patientUserA.setName("Patient Alice");
+        patientUserA.setEmail("patientA@test.com");
+        if (patientUserA.getPasswordHash() == null || !passwordEncoder.matches("Pass123!", patientUserA.getPasswordHash())) {
+            patientUserA.setPasswordHash(passwordEncoder.encode("Pass123!"));
         }
+        patientUserA.setRole(Role.PATIENT);
+        patientUserA.setStatus(AccountStatus.ACTIVE);
+        patientUserA.setEmailVerified(true);
+        patientUserA.setPatientId("PAT-301");
+        patientUserA.setHospitalId("HOSP-101");
+        patientUserA.setPhone(null);
+        patientUserA.setAvatarUrl(null);
+        patientUserA = userRepository.save(patientUserA);
 
         // Patient B
         if (!userRepository.existsByEmailIgnoreCase("patientB@test.com")) {
@@ -77,6 +92,70 @@ public class DataIsolationTests {
             User a = new User("ADMIN-01", "Super Admin", "admin@hospitrack.com", passwordEncoder.encode("Admin@123!"), Role.SUPER_ADMIN);
             return userRepository.save(a);
         });
+    }
+
+    @AfterEach
+    void restoreBaselineFixtures() {
+        Patient baselinePatient = patientRepository.findById("PAT-301")
+                .orElseGet(() -> new Patient(
+                        "PAT-301", "John Doe", "Male", 42, "O+", "+91 98111 00001",
+                        "john.doe@email.com", "Flat 402, Sunrise Heights, New Delhi",
+                        "+91 98111 99991 (Jane Doe - Spouse)", "HOSP-101", "DOC-201"
+                ));
+        baselinePatient.setName("John Doe");
+        baselinePatient.setGender("Male");
+        baselinePatient.setAge(42);
+        baselinePatient.setBloodGroup("O+");
+        baselinePatient.setContact("+91 98111 00001");
+        baselinePatient.setEmail("john.doe@email.com");
+        baselinePatient.setAddress("Flat 402, Sunrise Heights, New Delhi");
+        baselinePatient.setEmergencyContact("+91 98111 99991 (Jane Doe - Spouse)");
+        baselinePatient.setEmergencyContactName("Jane Doe");
+        baselinePatient.setEmergencyContactPhone("+91 98111 99991");
+        baselinePatient.setEmergencyContactRelation("Spouse");
+        baselinePatient.setCurrentHospitalId("HOSP-101");
+        baselinePatient.setPrimaryDoctorId("DOC-201");
+        baselinePatient.setStatus("CHECKED_IN");
+        baselinePatient.setWard("General Medicine Ward");
+        baselinePatient.setBedNumber("GEN-01");
+        baselinePatient.setPhotoUrl(null);
+        baselinePatient.setDischargedAt(null);
+        patientRepository.save(baselinePatient);
+
+        User johnUser = userRepository.findById("USER-PAT-301")
+                .or(() -> userRepository.findByEmailIgnoreCase("john.doe@email.com"))
+                .orElseGet(() -> new User("USER-PAT-301", "John Doe", "john.doe@email.com", passwordEncoder.encode("Patient@123!"), Role.PATIENT));
+        johnUser.setName("John Doe");
+        johnUser.setEmail("john.doe@email.com");
+        if (johnUser.getPasswordHash() == null || !passwordEncoder.matches("Patient@123!", johnUser.getPasswordHash())) {
+            johnUser.setPasswordHash(passwordEncoder.encode("Patient@123!"));
+        }
+        johnUser.setRole(Role.PATIENT);
+        johnUser.setStatus(AccountStatus.ACTIVE);
+        johnUser.setEmailVerified(true);
+        johnUser.setPatientId("PAT-301");
+        johnUser.setHospitalId("HOSP-101");
+        johnUser.setPhone(null);
+        johnUser.setAvatarUrl(null);
+        userRepository.save(johnUser);
+
+        userRepository.findById("USER-PAT-A")
+                .or(() -> userRepository.findByEmailIgnoreCase("patientA@test.com"))
+                .ifPresent(aliceUser -> {
+                    aliceUser.setName("Patient Alice");
+                    aliceUser.setEmail("patientA@test.com");
+                    if (aliceUser.getPasswordHash() == null || !passwordEncoder.matches("Pass123!", aliceUser.getPasswordHash())) {
+                        aliceUser.setPasswordHash(passwordEncoder.encode("Pass123!"));
+                    }
+                    aliceUser.setRole(Role.PATIENT);
+                    aliceUser.setStatus(AccountStatus.ACTIVE);
+                    aliceUser.setEmailVerified(true);
+                    aliceUser.setPatientId("PAT-301");
+                    aliceUser.setHospitalId("HOSP-101");
+                    aliceUser.setPhone(null);
+                    aliceUser.setAvatarUrl(null);
+                    userRepository.save(aliceUser);
+                });
     }
 
     @Test

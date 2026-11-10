@@ -11,7 +11,7 @@
 
 ## EXECUTIVE SUMMARY
 
-Hospitrack is an enterprise healthcare platform designed with a **Java 17 Spring Boot 3.3.3 REST API backend** and a **Vanilla HTML5 / CSS3 / JavaScript single-page application frontend**.
+Hospitrack is an enterprise healthcare platform designed with a **Java 25 Spring Boot 3.5.16 REST API backend** and a **Vanilla HTML5 / CSS3 / JavaScript single-page application frontend**.
 
 The critical failure observed during deployment—where **only basic unstyled HTML renders without CSS, JavaScript, or backend communication**—is caused by the convergence of **six distinct architectural and deployment configuration defects**:
 
@@ -31,7 +31,7 @@ A thorough verification of the codebase source files reveals the real functional
 | Component | Physical Location | Actual Technology | Intended Role | Verification Evidence |
 | :--- | :--- | :--- | :--- | :--- |
 | **Frontend Web App** | Root directory (`index.html`, `css/`, `js/`) | Vanilla HTML5, CSS3, JavaScript (ES6 Modules) | Client UI & Healthcare Portal | [`index.html`](file:///d:/Hospitrack-main/Hospitrack-main/index.html) loads styles and 18 modular scripts; no build/bundle step required. |
-| **Active Backend API** | [`backend/`](file:///d:/Hospitrack-main/Hospitrack-main/backend) | Java 17, Spring Boot 3.3.3, Spring Security 6, Spring Data JPA | Authoritative Healthcare REST API & Database Models | [`backend/pom.xml`](file:///d:/Hospitrack-main/Hospitrack-main/backend/pom.xml), 16 `@RestController` classes, 18 JPA entities. |
+| **Active Backend API** | [`backend/`](file:///d:/Hospitrack-main/Hospitrack-main/backend) | Java 25, Spring Boot 3.5.16, Spring Security 6, Spring Data JPA | Authoritative Healthcare REST API & Database Models | [`backend/pom.xml`](file:///d:/Hospitrack-main/Hospitrack-main/backend/pom.xml), 16 `@RestController` classes, 18 JPA entities. |
 | **Node.js Server** | [`server.js`](file:///d:/Hospitrack-main/Hospitrack-main/server.js) | Pure Node.js (Zero external npm dependencies) | Static File Server + Reverse Proxy + Java Child Process Supervisor | Uses `http.createServer`, proxies `/api/*` to `:8080`, attempts `spawn('java', ...)` to start Spring Boot. |
 | **Python Server** | [`server.py`](file:///d:/Hospitrack-main/Hospitrack-main/server.py) | Python 3 `http.server.SimpleHTTPRequestHandler` | Local Static File Server (Development only) | 38 lines of code; has no API endpoints, no database layer, and no proxy capabilities. |
 | **Prototype TSX Files** | [`js/modules/*.tsx`](file:///d:/Hospitrack-main/Hospitrack-main/js/modules) | React / TypeScript Source Files | Inactive Prototypes / Reference Designs | 6 `.tsx` files (`ClinicalReferralDispatchForm.tsx`, `SuperadminDashboard.tsx`, etc.) are completely unreferenced in `index.html`. |
@@ -41,7 +41,7 @@ A thorough verification of the codebase source files reveals the real functional
 1. **Actual Frontend:**
    The frontend is **not React or Vite**. It is a pure, zero-bundler Vanilla Single Page Application (SPA) driven by [`index.html`](file:///d:/Hospitrack-main/Hospitrack-main/index.html), [`css/styles.css`](file:///d:/Hospitrack-main/Hospitrack-main/css/styles.css), and modular vanilla JS scripts in [`js/`](file:///d:/Hospitrack-main/Hospitrack-main/js).
 2. **Actual Backend:**
-   The application backend is **exclusively Java Spring Boot 3.3.3**. There is no Node.js backend logic (Express/Fastify) and no Python backend logic (FastAPI/Django/Flask).
+   The application backend is **exclusively Java Spring Boot 3.5.16**. There is no Node.js backend logic (Express/Fastify) and no Python backend logic (FastAPI/Django/Flask).
 3. **Frontend File Server:**
    In local development and containerized production, [`server.js`](file:///d:/Hospitrack-main/Hospitrack-main/server.js) serves static assets from `PUBLIC_DIR = __dirname`. On static hosts (Netlify/Vercel), their CDN edge servers serve these files.
 4. **API Request Handler:**
@@ -200,12 +200,12 @@ The warning logged in the console:
 
 A rigorous evaluation of hosting providers against Hospitrack's multi-technology architecture:
 
-| Hosting Platform | Static Frontend? | Node Server? | Python Backend? | Spring Boot (Java 17)? | Multi-Process Support? | Deployment Model | Verdict |
+| Hosting Platform | Static Frontend? | Node Server? | Python Backend? | Spring Boot (Java 25)? | Multi-Process Support? | Deployment Model | Verdict |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Vercel** | **YES** | Partial (Serverless only) | Partial (Serverless only) | **NO** (No JVM support) | **NO** | Frontend Only | **Incompatible** for monolithic deployment. Cannot run Spring Boot. |
 | **Netlify** | **YES** | Partial (Serverless only) | **NO** | **NO** (No JVM support) | **NO** | Frontend Only | **Incompatible** for monolithic deployment. Cannot run Spring Boot. |
 | **Render** | **YES** | **YES** (Web Service) | **YES** (Web Service) | **YES** (via Docker Web Service) | **YES** (Single Docker container or multi-service Blueprint) | Unified Docker or Multi-Service | **Compatible**, but free tier 512MB RAM constraint requires strict JVM memory tuning. |
-| **Railway** | **YES** | **YES** (Node Service) | **YES** | **YES** (Native Java 17 Nixpacks / Docker) | **YES** (Multi-service projects) | Decoupled Multi-Service | **Highly Compatible**. Best platform for decoupling Frontend, Backend & Database. |
+| **Railway** | **YES** | **YES** (Node Service) | **YES** | **YES** (Native Java 25 Nixpacks / Docker) | **YES** (Multi-service projects) | Decoupled Multi-Service | **Highly Compatible**. Best platform for decoupling Frontend, Backend & Database. |
 | **VPS / Cloud Server** (DigitalOcean / AWS / Hetzner) | **YES** (Nginx / Caddy) | **YES** (PM2 / systemd) | **YES** | **YES** (`systemd` Java service) | **YES** (Full root OS access) | Decoupled or Reverse Proxied | **Production Standard**. Highest stability, no RAM throttling, no sleep timeouts. |
 
 ### Platform-Specific Limitations & Analysis
@@ -216,7 +216,7 @@ A rigorous evaluation of hosting providers against Hospitrack's multi-technology
 
 #### 2. Render
 * **Unified Docker Architecture ([`Dockerfile`](file:///d:/Hospitrack-main/Hospitrack-main/Dockerfile)):**
-  The repository already includes a multi-stage Dockerfile that builds the Spring Boot JAR with Maven in Stage 1, then installs Node.js and Java 17 JRE in Stage 2 to run `node server.js`.
+  The repository already includes a multi-stage Dockerfile that builds the Spring Boot JAR with Maven in Stage 1, then installs Node.js and Java 25 JRE in Stage 2 to run `node server.js`.
 * **The 512MB RAM Cgroup Trap:**
   Render's Free Tier web service provides exactly 512MB of RAM. Spring Boot with Hibernate, Tomcat, and Spring Security typically consumes 300MB–450MB of RSS memory. Combined with Node.js (80MB–120MB), the unified container frequently hits the 512MB ceiling and is terminated by the Linux Out-Of-Memory (OOM) killer with `Exit code 137`.
 * **Cold Starts:**
@@ -316,7 +316,7 @@ When the application is deployed to a static host (or served through `server.js`
 ### 4. Why Is the Backend Not Starting?
 1. **Absence of JAR File:** `server.js` explicitly checks for `hospitrack-backend-1.0.0.jar`. Because no JAR is committed to Git, the check fails and `server.js` skips the startup command.
 2. **Missing Build Automation:** There is no npm build script to compile the backend prior to starting the web server.
-3. **No Java in Static Runtimes:** Netlify and Vercel environments do not contain Java 17.
+3. **No Java in Static Runtimes:** Netlify and Vercel environments do not contain Java 25.
 
 ### 5. Should Frontend and Backend Be Deployed Separately?
 **YES (Architecturally Recommended) or Unified via Docker Only.**
@@ -334,7 +334,7 @@ When the application is deployed to a static host (or served through `server.js`
 ### 6. Which Hosting Platform Is Most Suitable?
 
 1. **Top Recommendation: Railway (Decoupled Full-Stack Project)**
-   * Native Java 17 support, instant PostgreSQL provisioning, and separate static frontend serving. Eliminates 512MB RAM OOM crashes.
+   * Native Java 25 support, instant PostgreSQL provisioning, and separate static frontend serving. Eliminates 512MB RAM OOM crashes.
 2. **Alternative: Render (Using Existing Dockerfile Blueprint)**
    * If you prefer an all-in-one free deployment, use Render **Docker Web Service** (not Render Static Site, and not Render Node Service).
 3. **Avoid for Full-Stack: Netlify / Vercel**

@@ -1,5 +1,6 @@
 package com.hospitrack;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hospitrack.dto.*;
 import com.hospitrack.entity.*;
@@ -152,12 +153,14 @@ public class AuthenticationAndRoleAccountTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.name", is("Aarav Singhania")))
-                .andExpect(jsonPath("$.email", is(patEmail)))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id", notNullValue()))
+                .andExpect(jsonPath("$.data.name", is("Aarav Singhania")))
+                .andExpect(jsonPath("$.data.email", is(patEmail)))
                 .andReturn().getResponse().getContentAsString();
 
-        Patient created = objectMapper.readValue(response, Patient.class);
+        JsonNode createNode = objectMapper.readTree(response).path("data");
+        Patient created = objectMapper.treeToValue(createNode, Patient.class);
         assertNotNull(created.getId());
 
         // Verify User record exists in database
@@ -199,8 +202,11 @@ public class AuthenticationAndRoleAccountTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id", notNullValue()))
                 .andReturn().getResponse().getContentAsString();
-        Patient created = objectMapper.readValue(createRes, Patient.class);
+        Patient created = objectMapper.treeToValue(objectMapper.readTree(createRes).path("data"), Patient.class);
+        assertNotNull(created.getId());
 
         // 1. Login via exact email
         LoginRequest loginEmail = new LoginRequest();
@@ -305,13 +311,15 @@ public class AuthenticationAndRoleAccountTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.name", is("Dr. Anand Kulkarni")))
-                .andExpect(jsonPath("$.email", is(docEmail)))
-                .andExpect(jsonPath("$.initialPassword", is(rawPassword)))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id", notNullValue()))
+                .andExpect(jsonPath("$.data.name", is("Dr. Anand Kulkarni")))
+                .andExpect(jsonPath("$.data.email", is(docEmail)))
+                .andExpect(jsonPath("$.data.initialPassword", is(rawPassword)))
                 .andReturn().getResponse().getContentAsString();
 
-        Doctor createdDoc = objectMapper.readValue(createRes, Doctor.class);
+        Doctor createdDoc = objectMapper.treeToValue(objectMapper.readTree(createRes).path("data"), Doctor.class);
+        assertNotNull(createdDoc.getId());
 
         // Verify User record in UserRepository
         Optional<User> userOpt = userRepository.findByEmailIgnoreCase(docEmail);
@@ -350,8 +358,11 @@ public class AuthenticationAndRoleAccountTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id", notNullValue()))
                 .andReturn().getResponse().getContentAsString();
-        Doctor createdDoc = objectMapper.readValue(createRes, Doctor.class);
+        Doctor createdDoc = objectMapper.treeToValue(objectMapper.readTree(createRes).path("data"), Doctor.class);
+        assertNotNull(createdDoc.getId());
 
         // 1. Login via Email
         LoginRequest loginEmail = new LoginRequest();
@@ -433,7 +444,8 @@ public class AuthenticationAndRoleAccountTests {
         mockMvc.perform(get("/api/doctors/me")
                         .header("Authorization", "Bearer " + docToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", is(docEmail)));
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.email", is(docEmail)));
 
         // 3. Access referrals
         mockMvc.perform(get("/api/referrals")
@@ -624,7 +636,9 @@ public class AuthenticationAndRoleAccountTests {
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(login)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message", containsStringIgnoringCase("suspended")));
     }
 
     // =========================================================================
@@ -647,10 +661,13 @@ public class AuthenticationAndRoleAccountTests {
         p.setAddress("404 Marine Drive, Mumbai");
         patientRepository.save(p);
 
-        // Hospital 1 Admin attempts to re-assign or modify patient of Hospital 2
-        PatientRequest illegalUpdate = new PatientRequest();
+        // Hospital 1 Admin attempts to modify patient of Hospital 2 with valid update payload
+        PatientUpdateRequest illegalUpdate = new PatientUpdateRequest();
         illegalUpdate.setName("Tampered Name");
-        illegalUpdate.setCurrentHospitalId("HOSP-101");
+        illegalUpdate.setGender("Male");
+        illegalUpdate.setAge(50);
+        illegalUpdate.setBloodGroup("O+");
+        illegalUpdate.setContact("+91 99999 11111");
         illegalUpdate.setPrimaryDoctorId("DOC-201");
         illegalUpdate.setAddress("Changed Address");
 

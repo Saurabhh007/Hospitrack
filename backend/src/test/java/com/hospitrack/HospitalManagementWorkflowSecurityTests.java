@@ -5,6 +5,7 @@ import com.hospitrack.dto.*;
 import com.hospitrack.entity.*;
 import com.hospitrack.repository.*;
 import com.hospitrack.security.JwtTokenProvider;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,6 +104,52 @@ public class HospitalManagementWorkflowSecurityTests {
             return userRepository.save(u);
         });
         hosp2AdminToken = jwtTokenProvider.generateTokenFromUser(hosp2Admin);
+    }
+
+    @AfterEach
+    void restoreSharedHospitalFixtures() {
+        hospitalRepository.findById("HOSP-101").ifPresent(h1 -> {
+            h1.setName("City General Hospital");
+            h1.setCode("CGH-01");
+            h1.setLocation("Metro Health Corridor, Sector 4, New Delhi");
+            h1.setContact("+91 98201 44551");
+            h1.setEmail("admin@citygeneral.in");
+            h1.setTotalBeds(250);
+            h1.setAvailableBeds(42);
+            h1.setStatus("ACTIVE");
+            h1.setFacilities(null);
+            h1.setSpecializations(null);
+            hospitalRepository.save(h1);
+        });
+
+        hospitalRepository.findById("HOSP-102").ifPresent(h2 -> {
+            h2.setStatus("ACTIVE");
+            hospitalRepository.save(h2);
+        });
+
+        userRepository.findById("USER-HOSP-101")
+                .or(() -> userRepository.findByEmailIgnoreCase("admin@citygeneral.in"))
+                .ifPresent(u -> {
+                    u.setEmail("admin@citygeneral.in");
+                    if (u.getPasswordHash() == null || !passwordEncoder.matches("Hospital@123!", u.getPasswordHash())) {
+                        u.setPasswordHash(passwordEncoder.encode("Hospital@123!"));
+                    }
+                    u.setStatus(AccountStatus.ACTIVE);
+                    u.setHospitalId("HOSP-101");
+                    userRepository.save(u);
+                });
+
+        userRepository.findById("USER-HOSP-102")
+                .or(() -> userRepository.findByEmailIgnoreCase("operations@apexcare.in"))
+                .ifPresent(u -> {
+                    u.setEmail("operations@apexcare.in");
+                    if (u.getPasswordHash() == null || !passwordEncoder.matches("Hospital@123!", u.getPasswordHash())) {
+                        u.setPasswordHash(passwordEncoder.encode("Hospital@123!"));
+                    }
+                    u.setStatus(AccountStatus.ACTIVE);
+                    u.setHospitalId("HOSP-102");
+                    userRepository.save(u);
+                });
     }
 
     @Test
